@@ -14,8 +14,5 @@ RUN mkdir /.meterian
 RUN curl -o /.meterian/meterian-cli.jar  -O -J \
          -L https://www.meterian.com/latest-client-canary
 
-ARG METERIAN_CLIENT_JAR
-COPY ${METERIAN_CLIENT_JAR} /${METERIAN_CLIENT_JAR}
-
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
