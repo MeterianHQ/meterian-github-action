@@ -1,3 +1,3 @@
-# Hello World GitHub Action
+# Meterian Scanner GitHub Action
 
-A Hello World repo to test out github actions
+A repo for Meterian Scanner implementing a github action
