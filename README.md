@@ -5,15 +5,14 @@ Scan for vulnerabilities in your project using the Meterian Scanner GitHub actio
 
 ## How to configure and use the action
 
-- Via the GitHub interface add action via the Action tab
+- Add an action via the Actions tab in the GitHub interface (see [resource below for help](#github-actions-related-and-other-resources))
 - Create or amend an existing workflow (see [Example Workflow](#example-workflow))
-- Enter MeterianHQ/meterian-github-action@master
-- Add a secret Meterian token by the name METERIAN_API_TOKEN
+- Use the `MeterianHQ/meterian-github-action@master` in the `uses` directive
+- Generate the Meterian API token
     - Create an account or log into your account on http://meterian.com
     - Create an new secret API token from the dashboard
-    - Add this secret token for the GitHub action to use
-
-Note: go to the https://github.com/[your org]/[your repo]/settings/secrets page and click on the `Add a new Secret` link, to add the above secret to the repository where the GitHub Action is being setup.
+- Add the above token as a GitHub secret by the name METERIAN_API_TOKEN
+    - Go to the https://github.com/[your-org]/[your-repo]/settings/secrets page and click on the `Add a new Secret` link
 
 
 ### Example workflow
