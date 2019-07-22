@@ -7,6 +7,7 @@ LABEL "com.github.actions.color"="blue"
 
 LABEL "repository"="http://github.com/MeterianHQ/meterian-scanner-action"
 LABEL "homepage"="http://github.com/MeterianHQ"
+LABEL "maintainer"="Mani Sarkar <sadhak001@gmail.com>, Bruno Bossola <bruno@meterian.io>"
 
 RUN mkdir /.meterian
 
