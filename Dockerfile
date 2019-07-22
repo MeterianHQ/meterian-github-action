@@ -5,7 +5,7 @@ LABEL "com.github.actions.description"="Scan a Java repository for vulnerabiliti
 LABEL "com.github.actions.icon"="zoom-in"
 LABEL "com.github.actions.color"="blue"
 
-LABEL "repository"="http://github.com/MeterianHQ/meterian-scanner-action"
+LABEL "repository"="http://github.com/MeterianHQ/meterian-github-action"
 LABEL "homepage"="http://github.com/MeterianHQ"
 LABEL "maintainer"="Bruno Bossola <bruno@meterian.io>, Mani Sarkar <sadhak001@gmail.com>"
 

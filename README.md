@@ -6,7 +6,7 @@ Scan for vulnerabilities in your project using the Meterian Scanner GitHub actio
 
 - Via the GitHub interface add action via the Action tab
 - Create or amend an existing workflow
-- Enter MeterianHq/meterian-scanner-action@master
+- Enter MeterianHQ/meterian-github-action@master
 - Add a secret Meterian token by the name METERIAN_API_TOKEN
     - Create an account or log into your account on http://meterian.com
     - Create an new secret API token from the dashboard
