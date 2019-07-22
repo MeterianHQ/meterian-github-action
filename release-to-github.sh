@@ -16,7 +16,7 @@ function createNewRelease() {
     "body": "This is a Meterian Scanner GitHub Action, enabling scanning of projects for vulnerabilities. Please provided the necessary METERIAN_API_TOKEN (as a secret key as a repository setting), a token generated via http://meterian.com in order for the action to work. Please checkout the [README](https://github.com/MeterianHQ/meterian-github-action/blob/master/README.md) for further details.",
     "draft": false,
     "prerelease": false
-  }' ${TAG_NAME} ${TAG_NAME} ${TAG_NAME})
+  }' ${TAG_NAME} ${TAG_NAME})
   echo "~~~~ Creating release ${RELEASE_VERSION}: $POST_DATA"
   curl \
       -H "Authorization: token ${METERIAN_GITHUB_TOKEN}" \
