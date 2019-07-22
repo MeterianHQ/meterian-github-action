@@ -1,0 +1,6 @@
+LICENSE.md
+README.md
+delete-release-from-github.sh
+release-to-github.sh
+version.txt
+artifacts/
