@@ -3,4 +3,5 @@ README.md
 delete-release-from-github.sh
 release-to-github.sh
 version.txt
+action.yml
 artifacts/
