@@ -5,10 +5,7 @@
 name: Meterian Scanner
 description: Scan a Java repository for vulnerabilities in your project  
 inputs:
-    # meterian_api_token: # env variable - referenced in Docker file as "INPUT_METERIAN_API_TOKEN"
-    #     required: false
-    #     description: The Meterian API token
-    cli_args: # positional params - referenced in Docker file as ...$1...$n
+    cli_args:
         required: false
         description: Meterian client parameters
         default: --help
