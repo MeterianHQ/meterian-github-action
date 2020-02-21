@@ -19,7 +19,7 @@ echo "export GRADLE_USER_HOME=~/.gradle" >> /tmp/init.sh
 # run the script binding the user if required
 if [ "${HOST_UID}" == "" ];
 then
-    /tmp/meterian.sh 2>/dev/null
+    /tmp/meterian.sh
 
     # please do not add any command here as we need to preserve the exit status
     # of the meterian client
