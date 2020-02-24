@@ -35,7 +35,7 @@ Find out more in the [Meterian PDF manual](https://www.meterian.com/documents/me
 
 Below is an example workflow using the Meterian Scanner GitHub Action:
 
-```
+```yaml
 name: Meterian Scanner workflow
 
 on: push
@@ -63,7 +63,6 @@ jobs:
             run: |
                exit_code=${{ steps.vuln_scan.outputs.exit_code }}
                [[ $exit_code -ne 0 ]] && exit 1
-
 
 ```
 
