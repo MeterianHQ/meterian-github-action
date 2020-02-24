@@ -46,9 +46,8 @@ if [[ -n "${METERIAN_API_TOKEN:-}" || ${METERIAN_CLI_ARGS} =~ ${INDEPENDENT_METE
 then
 	java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS}
 fi
-
-# setting the GitHub action output parameter with the exit code provided by the client execution
-echo ::set-output name=exit_code::$?
+# storing exit code
+client_exit_code=$?
 
 # dump docker packaged version, and eventually related error messages, right after the client version
 if [[ ${METERIAN_CLI_ARGS} =~ ${INDEPENDENT_METERIAN_CLI_OPTIONS} ]];then
@@ -57,7 +56,7 @@ if [[ ${METERIAN_CLI_ARGS} =~ ${INDEPENDENT_METERIAN_CLI_OPTIONS} ]];then
 	exitWithErrorMessageWhenApiTokenIsUnset
 fi
 
-exit 0
+exit "$client_exit_code"
 
 # please do not add any command here as we need to preserve the exit status
 # of the meterian client

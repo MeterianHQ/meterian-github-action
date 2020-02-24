@@ -8,16 +8,6 @@ Scan for vulnerabilities in your project using the Meterian Scanner GitHub actio
 
 **Optional** - Any additional Meterian CLI options. Find out more about these via the [Meterian PDF manual](https://www.meterian.com/documents/meterian-cli-manual.pdf).
 
-## Outputs
-
-### `exit_code`
-
-The exit code representing the client scan outcome:
-- +1: failure on the security score
-- +2: failure on the stability score
-- +4: failure on the licensing score
-
-Find out more in the [Meterian PDF manual](https://www.meterian.com/documents/meterian-cli-manual.pdf).
 
 ## How to configure and use the action
 
@@ -36,6 +26,7 @@ Find out more in the [Meterian PDF manual](https://www.meterian.com/documents/me
 Below is an example workflow using the Meterian Scanner GitHub Action:
 
 ```yaml
+
 name: Meterian Scanner workflow
 
 on: push
@@ -47,22 +38,12 @@ jobs:
         steps: 
           - name: Checkout
             uses: actions/checkout@v2
-          - name: Meterian Scanner Action
-            id: vuln_scan
+          - name: Vulnerability scan
             uses: MeterianHQ/meterian-github-action@master
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
             with:
                 args: "" ## placeholder for METERIAN_CLI_ARGS
-
-          # Example job step that stops the workflow skipping following steps
-          # if the build has a nonzero exit code
-          # This step can be personalized to your liking
-
-          - name: Act on scan outcome exit code
-            run: |
-               exit_code=${{ steps.vuln_scan.outputs.exit_code }}
-               [[ $exit_code -ne 0 ]] && exit 1
 
 ```
 

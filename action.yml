@@ -6,9 +6,6 @@ inputs:
     cli_args:
         required: false
         description: Meterian client parameters
-outputs: 
-    exit_code:
-        description: The exit code returned by the Meterian client reflecting the scan outcome
 runs:
     using: docker
     image: Dockerfile
