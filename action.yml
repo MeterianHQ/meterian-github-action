@@ -1,9 +1,7 @@
-# manifest
-
-# action.yml
+# metadata file
 
 name: Meterian Scanner
-description: Scan a Java repository for vulnerabilities in your project  
+description: Scan your repository for vulnerabilities
 inputs:
     cli_args:
         required: false

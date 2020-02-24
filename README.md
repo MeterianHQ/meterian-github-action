@@ -2,6 +2,22 @@
 
 Scan for vulnerabilities in your project using the Meterian Scanner GitHub action 
 
+## Inputs
+
+### `cli_args`
+
+**Optional** - Any additional Meterian CLI options. Find out more about these via the [Meterian PDF manual](https://www.meterian.com/documents/meterian-cli-manual.pdf).
+
+## Outputs
+
+### `exit_code`
+
+The exit code representing the client scan outcome:
+- +1: failure on the security score
+- +2: failure on the stability score
+- +4: failure on the licensing score
+
+Find out more in the [Meterian PDF manual](https://www.meterian.com/documents/meterian-cli-manual.pdf).
 
 ## How to configure and use the action
 
@@ -20,26 +36,46 @@ Scan for vulnerabilities in your project using the Meterian Scanner GitHub actio
 Below is an example workflow using the Meterian Scanner GitHub Action:
 
 ```
-workflow "Meterian Scanner workflow" {
-    on = "push"
-    resolves = ["Meterian Scanner Action"]
-}
+name: Meterian Scanner workflow
 
-action "Meterian Scanner Action" {
-    uses = "MeterianHQ/meterian-github-action@master"
-    secrets = ["METERIAN_API_TOKEN"]
-    args = "" ## placeholder for METERIAN_CLI_ARGS
-}
+on: push
+
+jobs:
+    meterian_scan:
+        name: Meterian client scan
+        runs-on: ubuntu-latest
+        steps: 
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Meterian Scanner Action
+            id: vuln_scan
+            uses: MeterianHQ/meterian-github-action@master
+            env:
+              METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+            with:
+                args: "" ## placeholder for METERIAN_CLI_ARGS
+
+          # Example job step that stops the workflow skipping following steps
+          # if the build has a nonzero exit code
+          # This step can be personalized to your liking
+
+          - name: Act on scan outcome exit code
+            run: |
+               exit_code=${{ steps.vuln_scan.outputs.exit_code }}
+               [[ $exit_code -ne 0 ]] && exit 1
+
+
 ```
 
-Place it in a `main.workflow` file in the `.github` folder, in the root of your project:
+Place it in a `main.yml` file in the `.github/workflows` folder, in the root of your project:
 
 ```
 .github
-└── main.workflow
+└── workflows/
+    └── main.yml
 ```
 
-`METERIAN_API_TOKEN` is expected to be created as a GitHub Secret in the respespective GitHub repository.
+`METERIAN_API_TOKEN` is expected to be created as a GitHub Secret in the respective GitHub repository.
 
 Or see [sample project: autofix-sample-maven-upgrade](https://raw.githubusercontent.com/MeterianHQ/autofix-sample-maven-upgrade/add-github-meterian-client-action/.github/main.workflow) | [Workflow interface](https://github.com/MeterianHQ/autofix-sample-maven-upgrade/blob/add-github-meterian-client-action/.github/main.workflow) for a similar working example on how to use the above GitHub action in your project.
 

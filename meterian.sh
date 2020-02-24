@@ -47,7 +47,7 @@ then
 	java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS}
 fi
 
-# setting the GitHub action output parameter
+# setting the GitHub action output parameter with the exit code provided by the client execution
 echo ::set-output name=exit_code::$?
 
 # dump docker packaged version, and eventually related error messages, right after the client version
