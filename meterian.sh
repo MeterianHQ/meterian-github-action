@@ -44,7 +44,7 @@ fi
 # launching the client - note the different launch if version requested to preserve the "--version" base functionality
 if [[ -n "${METERIAN_API_TOKEN:-}" || ${METERIAN_CLI_ARGS} =~ ${INDEPENDENT_METERIAN_CLI_OPTIONS} ]];
 then
-	java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS}
+	java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
 fi
 # storing exit code
 client_exit_code=$?
