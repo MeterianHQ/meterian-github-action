@@ -62,7 +62,7 @@ Or see [sample project: autofix-sample-maven-upgrade](https://raw.githubusercont
 
 ### GitHub Actions related and other resources
 
-- https://developer.github.com/actions/managing-workflows/
+- https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
 - https://developer.github.com/marketplace
 - https://www.youtube.com/watch?v=Tl4mbL45PKU
-- https://developer.github.com/actions/managing-workflows/storing-secrets/
+- https://help.github.com/en/actions/configuring-and-managing-workflows/using-variables-and-secrets-in-a-workflow
