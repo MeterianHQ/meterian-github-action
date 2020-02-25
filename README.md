@@ -1,6 +1,6 @@
 # Meterian Scanner GitHub Action
 
-This action allows you to scan for vulnerabilities in your project using the Meterian Scanner GitHub action.
+The Meterian Scanner GitHub action allows you to automatically scan for vulnerabilities right in your repository as part of your software development workflows.
 
 ## Inputs
 
@@ -26,7 +26,7 @@ As the Meterian client requires authentication to function, you will need to gen
 
 Within your [**workflow**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions) configure a [**job**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobs) that uses the Meterian GitHub action:
 
-[**Check-out**](https://github.com/actions/checkout#checkout-v2) your repository so that it's accessible by the workflow.
+[**Check-out**](https://github.com/actions/checkout#checkout-v2) your repository so that it's accessible by the workflow
 
 ```yml
 # jobs.<job_id>.steps
@@ -37,10 +37,10 @@ Set the Meterian Scanner GitHub action to scan your repository
 
 ```yaml    
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@master
+      uses: MeterianHQ/meterian-github-action@v1.0.0
 ```
 
-In the step of your newly configured job, set the input data ( `cli_args` ) and the environment variable `METERIAN_API_TOKEN`, required for a proper vulnerability scan to take place.
+In the step of your newly configured job, set the input data ( `cli_args` ) and the environment variable `METERIAN_API_TOKEN`, required for a proper vulnerability scan to take place
 
 ```yaml
       with:
@@ -65,7 +65,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@master
+            uses: MeterianHQ/meterian-github-action@v1.0.0
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
             with:
@@ -77,14 +77,13 @@ jobs:
 
 ## Live examples
 
-- [Java sample project]()
-- [Php sample scan]()
-- [Ruby sample scan]()
-- [Python sample scan]()
+- [Java sample project](https://github.com/MeterianHQ/java-sample-project/runs/467700963)
+- [Php sample project](https://github.com/MeterianHQ/php-sample-project/runs/467739881)
+- [Dotnet sample project](https://github.com/MeterianHQ/dotnet-sample-project/runs/45025162)
+- [Ruby sample project](https://github.com/MeterianHQ/ruby-sample-project/runs/45025660)
+- [Python sample project](https://github.com/MeterianHQ/python-sample-project/runs/45027911)
+- [Node.js sample project](https://github.com/MeterianHQ/node-sample-project/runs/45028358)
 
-**TBU**
-
-<br>
 <br>
 
 ## GitHub Actions related and other resources
