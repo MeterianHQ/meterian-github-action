@@ -10,6 +10,11 @@ TARGET_REPO="MeterianHQ/meterian-github-action"
 RELEASE_VERSION="$(cat ${CURRENT_DIR}/version.txt)"
 TAG_NAME="v$(cat ${CURRENT_DIR}/version.txt)"
 
+if [[ -z ${METERIAN_GITHUB_TOKEN} ]]; then
+  echo "METERIAN_GITHUB_TOKEN cannot be found in the current environment, please populate to proceed either in the startup bash script of your OS or in the environment variable settings of your CI/CD interface."
+  exit -1
+fi
+
 echo ""
 echo "~~~~ Fetching Release ID for ${TAG_NAME}"
 mkdir -p ${CURRENT_DIR}/artifacts

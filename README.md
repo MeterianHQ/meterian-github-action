@@ -1,52 +1,95 @@
 # Meterian Scanner GitHub Action
 
-Scan for vulnerabilities in your project using the Meterian Scanner GitHub action 
+This action allows you to scan for vulnerabilities in your project using the Meterian Scanner GitHub action.
+
+## Inputs
+
+### `cli_args`
+
+**Optional** Any additional Meterian CLI options. Find out more about these via the [Meterian PDF manual](https://www.meterian.com/documents/meterian-cli-manual.pdf).
 
 
-## How to configure and use the action
+## Usage
 
-- Add an action via the Actions tab in the GitHub interface (see [resource below for help](#github-actions-related-and-other-resources))
-- Create or amend an existing workflow (see [Example Workflow](#example-workflow))
-- Use the `MeterianHQ/meterian-github-action@master` in the `uses` directive
-- Generate the Meterian API token
-    - Create an account or log into your account on http://meterian.com
-    - Create an new secret API token from the dashboard
-- Add the above token as a GitHub secret by the name METERIAN_API_TOKEN
-    - Go to the https://github.com/[your-org]/[your-repo]/settings/secrets page and click on the `Add a new Secret` link
+### Pre-required configuration
 
+As the Meterian client requires authentication to function, you will need to generate an API token and set a GitHub secret within the repository of the project you wish to scan:
 
-### Example workflow
+- Generate a Meterian API token
+  - Create an account or log into your account on http://meterian.com
+  - Create an new secret API token from the dashboard
+- Add the above token as a GitHub secret by the name `METERIAN_API_TOKEN`
+  - In your repository navigate to the Secrets page ( `Your repository > Settings > Secrets` )
+  - Click on the `Add a new Secret`
 
-Below is an example workflow using the Meterian Scanner GitHub Action:
+### Using the action as part of a job
 
+Within your [**workflow**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions) configure a [**job**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobs) that uses the Meterian GitHub action:
+
+[**Check-out**](https://github.com/actions/checkout#checkout-v2) your repository so that it's accessible by the workflow.
+
+```yml
+# jobs.<job_id>.steps
+    - name: Checkout
+      uses: actions/checkout@v2
 ```
-workflow "Meterian Scanner workflow" {
-    on = "push"
-    resolves = ["Meterian Scanner Action"]
-}
+Set the Meterian Scanner GitHub action to scan your repository
 
-action "Meterian Scanner Action" {
-    uses = "MeterianHQ/meterian-github-action@master"
-    secrets = ["METERIAN_API_TOKEN"]
-    args = "" ## placeholder for METERIAN_CLI_ARGS
-}
+```yaml    
+    - name: Meterian Scanner
+      uses: MeterianHQ/meterian-github-action@master
 ```
 
-Place it in a `main.workflow` file in the `.github` folder, in the root of your project:
+In the step of your newly configured job, set the input data ( `cli_args` ) and the environment variable `METERIAN_API_TOKEN`, required for a proper vulnerability scan to take place.
 
+```yaml
+      with:
+        cli_args: --min-security=85
+      env:
+        METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
-.github
-└── main.workflow
+
+<details>
+    <summary>Click here to view a complete example workflow</summary>
+
+```yaml
+name: Meterian Scanner workflow
+
+on: push
+
+jobs:
+    meterian_scan:
+        name: Meterian client scan
+        runs-on: ubuntu-latest
+        steps: 
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Meterian Scanner
+            uses: MeterianHQ/meterian-github-action@master
+            env:
+              METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+            with:
+                cli_args: --min-security=85
 ```
 
-`METERIAN_API_TOKEN` is expected to be created as a GitHub Secret in the respespective GitHub repository.
-
-Or see [sample project: autofix-sample-maven-upgrade](https://raw.githubusercontent.com/MeterianHQ/autofix-sample-maven-upgrade/add-github-meterian-client-action/.github/main.workflow) | [Workflow interface](https://github.com/MeterianHQ/autofix-sample-maven-upgrade/blob/add-github-meterian-client-action/.github/main.workflow) for a similar working example on how to use the above GitHub action in your project.
+</details>
 
 
-### GitHub Actions related and other resources
+## Live examples
 
-- https://developer.github.com/actions/managing-workflows/
+- [Java sample project]()
+- [Php sample scan]()
+- [Ruby sample scan]()
+- [Python sample scan]()
+
+**TBU**
+
+<br>
+<br>
+
+## GitHub Actions related and other resources
+
+- https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
 - https://developer.github.com/marketplace
 - https://www.youtube.com/watch?v=Tl4mbL45PKU
-- https://developer.github.com/actions/managing-workflows/storing-secrets/
+- https://help.github.com/en/actions/configuring-and-managing-workflows/using-variables-and-secrets-in-a-workflow
