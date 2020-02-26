@@ -2,12 +2,7 @@
 
 The Meterian Scanner GitHub action allows you to automatically scan for vulnerabilities right in your repository as part of your software development workflows.
 
-## Inputs
-
-### `cli_args`
-
-**Optional** Any additional Meterian CLI options. Find out more about these via the [Meterian PDF manual](https://www.meterian.com/documents/meterian-cli-manual.pdf).
-
+A list of supported languages can be found [here](https://docs.meterian.io/languages-support/languages-intro).
 
 ## Usage
 
@@ -22,37 +17,19 @@ As the Meterian client requires authentication to function, you will need to gen
   - In your repository navigate to the Secrets page ( `Your repository > Settings > Secrets` )
   - Click on the `Add a new Secret`
 
-### Using the action as part of a job
+### Inputs
 
-Within your [**workflow**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions) configure a [**job**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobs) that uses the Meterian GitHub action:
+#### `cli_args`
 
-[**Check-out**](https://github.com/actions/checkout#checkout-v2) your repository so that it's accessible by the workflow
+**Optional** Any additional Meterian CLI options. Find out more about these in the [Meterian documentation](https://docs.meterian.io/).
 
-```yml
-# jobs.<job_id>.steps
-    - name: Checkout
-      uses: actions/checkout@v2
-```
-Set the Meterian Scanner GitHub action to scan your repository
+### General example workflow
 
-```yaml    
-    - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.0
-```
-
-In the step of your newly configured job, set the input data ( `cli_args` ) and the environment variable `METERIAN_API_TOKEN`, required for a proper vulnerability scan to take place
+If you don't have an existing [**workflow**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions) within your repository, you can hit the ground running by using the following snippet
 
 ```yaml
-      with:
-        cli_args: --min-security=85
-      env:
-        METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
-```
+#main.yml
 
-<details>
-    <summary>Click here to view a complete example workflow</summary>
-
-```yaml
 name: Meterian Scanner workflow
 
 on: push
@@ -68,12 +45,31 @@ jobs:
             uses: MeterianHQ/meterian-github-action@v1.0.0
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
-            with:
-                cli_args: --min-security=85
+```
+Save this in a `main.yml` file in the `.github/workflows` folder, in the root of your project:
+```
+.github
+└── workflows
+    └── main.yml
 ```
 
-</details>
+### Integrating the action with an existing workflow
 
+Within your workflow, create a job step that uses the Meterian GitHub action
+
+```yaml   
+# jobs.<job_id>.steps 
+    - name: Meterian Scanner
+      uses: MeterianHQ/meterian-github-action@v1.0.0
+      env:
+        METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+```
+Optionally specify a client input argument
+```yml
+      with:
+        cli_args: --min-security=85
+```
+**Note:** the above snippet assumes that you are already [checking-out](https://github.com/actions/checkout#checkout-v2) your repository. 
 
 ## Live examples
 
