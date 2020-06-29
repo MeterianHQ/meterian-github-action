@@ -71,14 +71,14 @@ Optionally specify a client input argument
 ```
 **Note:** the above snippet assumes that you are already [checking-out](https://github.com/actions/checkout#checkout-v2) your repository. 
 
-## Live examples
+## Examples
 
-- [Java sample project](https://github.com/MeterianHQ/java-sample-project/runs/467700963)
-- [Php sample project](https://github.com/MeterianHQ/php-sample-project/runs/467739881)
-- [Dotnet sample project](https://github.com/MeterianHQ/dotnet-sample-project/runs/45025162)
-- [Ruby sample project](https://github.com/MeterianHQ/ruby-sample-project/runs/45025660)
-- [Python sample project](https://github.com/MeterianHQ/python-sample-project/runs/45027911)
-- [Node.js sample project](https://github.com/MeterianHQ/node-sample-project/runs/45028358)
+- [Java sample project](https://github.com/MeterianHQ/java-sample-project/blob/master/.github/workflows/main.yml)
+- [Php sample project](https://github.com/MeterianHQ/php-sample-project/blob/master/.github/workflows/main.yml)
+- [Dotnet sample project](https://github.com/MeterianHQ/dotnet-sample-project/blob/master/.github/workflows/main.yml)
+- [Ruby sample project](https://github.com/MeterianHQ/ruby-sample-project/blob/master/.github/workflows/main.yml)
+- [Python sample project](https://github.com/MeterianHQ/python-sample-project/blob/master/.github/workflows/main.yml)
+- [Node.js sample project](https://github.com/MeterianHQ/node-sample-project/blob/master/.github/workflows/main.yml)
 
 <br>
 
