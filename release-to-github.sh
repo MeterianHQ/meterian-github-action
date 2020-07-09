@@ -11,7 +11,7 @@ TARGET_REPO="MeterianHQ/meterian-github-action"
 function createNewRelease() {
     POST_DATA=$(printf '{
     "tag_name": "%s",
-    "target_commitish": "entrypoint-fix",
+    "target_commitish": "master",
     "name": "%s",
     "body": "This is a Meterian Scanner GitHub Action, enabling scanning of projects for vulnerabilities. Please provided the necessary METERIAN_API_TOKEN (as a GitHub secret key via the respective repository setting), a token generated via http://meterian.com in order for the action to work. Please checkout the [README](https://github.com/MeterianHQ/meterian-github-action/blob/master/README.md) for further details.",
     "draft": false,
