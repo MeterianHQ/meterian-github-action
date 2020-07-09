@@ -17,6 +17,9 @@ then
 	curl -s -o ${METERIAN_JAR} "https://www.meterian.com/downloads/meterian-cli.jar"  >/dev/null
 fi
 
+# Printing meterian dockerized version
+cat /root/version.txt 
+
 # launching the client
 java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
 

@@ -17,5 +17,11 @@ echo "export PATH=${PATH}" >> /tmp/init.sh
 echo "export GRADLE_HOME=/opt/gradle/gradle-6.1" >> /tmp/init.sh
 echo "export PATH=\${GRADLE_HOME}/bin:\${PATH}" >> /tmp/init.sh
 echo "export GRADLE_USER_HOME=~/.gradle" >> /tmp/init.sh
+echo "" >> /tmp/init.sh
+
+#- add go specific configurations
+echo "export GOROOT=/usr/local/go" >> /tmp/init.sh
+echo "export PATH=\${GOROOT}/bin:\${PATH}" >> /tmp/init.sh
+echo "" >> /tmp/init.sh
 
 /tmp/meterian.sh
