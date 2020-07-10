@@ -1,4 +1,4 @@
-FROM meterian/cli:latest
+FROM meterian/cli-canary:latest
 
 LABEL "repository"="http://github.com/MeterianHQ/meterian-github-action"
 LABEL "homepage"="http://github.com/MeterianHQ"
