@@ -29,4 +29,4 @@ fi
 chown meterian:meterian /home/meterian
 
 # launch meterian client with the newly created user
-su meterian -c -m /tmp/meterian.sh
+su meterian -c -m /tmp/meterian.sh 2> /dev/null
