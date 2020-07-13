@@ -33,7 +33,7 @@ METERIAN_JAR=/meterian-cli.jar
 updateClient "${METERIAN_JAR}" "https://www.meterian.com/downloads/meterian-cli.jar"
 
 # Printing meterian dockerized client version
-cat /root/version.txt 
+cat /tmp/version.txt 
 
 # launching the client
 java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
