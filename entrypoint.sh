@@ -28,4 +28,5 @@ fi
 # changing home dir group and ownership
 chown meterian:meterian /home/meterian
 
-/tmp/meterian.sh
+# launch meterian client with the newly created user
+su meterian -c -m /tmp/meterian.sh
