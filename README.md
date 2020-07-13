@@ -42,7 +42,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.1
+            uses: MeterianHQ/meterian-github-action@v1.0.3
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -60,7 +60,7 @@ Within your workflow, create a job step that uses the Meterian GitHub action
 ```yaml   
 # jobs.<job_id>.steps 
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.1
+      uses: MeterianHQ/meterian-github-action@v1.0.3
       env:
         METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
