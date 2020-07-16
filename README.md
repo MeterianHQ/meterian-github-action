@@ -8,7 +8,9 @@ A list of supported languages can be found [here](https://docs.meterian.io/langu
 
 ### Pre-required configuration
 
-As the Meterian client requires authentication to function, you will need to generate an API token and set a GitHub secret within the repository of the project you wish to scan:
+In order to use this action you require an authentication API token from Meterian which is only available for paid plans.
+
+Once registered to Meterian with an eligible plan, you can generate an API token and set it as GitHub secret within the repository you wish to scan:
 
 - Generate a Meterian API token
   - Create an account or log into your account on https://meterian.com
