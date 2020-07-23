@@ -13,6 +13,7 @@ getLastModifiedDateForFile() {
 }
 
 githubCustomConfig() {
+	export GOPRIVATE="github.com/${MGA_GITHUB_USER}"
 	git config \
 	--global \
 	url."https://${MGA_GITHUB_USER}:${MGA_GITHUB_TOKEN}@github.com".insteadOf \
@@ -21,11 +22,7 @@ githubCustomConfig() {
 
 versionControlCustomConfig() {
 	if [[ -n "${MGA_GITHUB_USER:-}" && -n "${MGA_GITHUB_TOKEN}" ]]; then
-		echo -ne "Detected GitHub credentials:\n${MGA_GITHUB_USER:-}\n${MGA_GITHUB_TOKEN}\n"
-		echo "Now setting them..."
-		set -x
 		githubCustomConfig
-		set +x
 	fi
 }
 versionControlCustomConfig
