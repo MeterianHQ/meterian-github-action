@@ -21,7 +21,11 @@ githubCustomConfig() {
 
 versionControlCustomConfig() {
 	if [[ -n "${MGA_GITHUB_USER:-}" && -n "${MGA_GITHUB_TOKEN}" ]]; then
+		echo -ne "Detected GitHub credentials:\n${MGA_GITHUB_USER:-}\n${MGA_GITHUB_TOKEN}\n"
+		echo "Now setting them..."
+		set -x
 		githubCustomConfig
+		set +x
 	fi
 }
 versionControlCustomConfig
