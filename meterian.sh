@@ -12,6 +12,20 @@ getLastModifiedDateForFile() {
 	echo $WHEN
 }
 
+githubCustomConfig() {
+	git config \
+	--global \
+	url."https://${MGA_GITHUB_USER}:${MGA_GITHUB_TOKEN}@github.com".insteadOf \
+	"https://github.com"
+}
+
+versionControlCustomConfig() {
+	if [[ -n "${MGA_GITHUB_USER:-}" && -n "${MGA_GITHUB_TOKEN}" ]]; then
+		githubCustomConfig
+	fi
+}
+versionControlCustomConfig
+
 updateClient() {
 	METERIAN_JAR_PATH=$1
 	CLIENT_TARGET_URL=$2
