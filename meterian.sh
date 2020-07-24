@@ -13,7 +13,6 @@ getLastModifiedDateForFile() {
 }
 
 githubCustomConfig() {
-	export GOPRIVATE="github.com/${MGA_GITHUB_USER}"
 	git config \
 	--global \
 	url."https://${MGA_GITHUB_USER}:${MGA_GITHUB_TOKEN}@github.com".insteadOf \
