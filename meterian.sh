@@ -12,6 +12,21 @@ getLastModifiedDateForFile() {
 	echo $WHEN
 }
 
+githubCustomConfig() {
+	export GOPRIVATE="github.com/${MGA_GITHUB_USER}"
+	git config \
+	--global \
+	url."https://${MGA_GITHUB_USER}:${MGA_GITHUB_TOKEN}@github.com".insteadOf \
+	"https://github.com"
+}
+
+versionControlCustomConfig() {
+	if [[ -n "${MGA_GITHUB_USER:-}" && -n "${MGA_GITHUB_TOKEN}" ]]; then
+		githubCustomConfig
+	fi
+}
+versionControlCustomConfig
+
 updateClient() {
 	METERIAN_JAR_PATH=$1
 	CLIENT_TARGET_URL=$2
@@ -22,6 +37,7 @@ updateClient() {
 	if [[ "${REMOTE_CLIENT_LAST_MODIFIED_DATE}" > "${LOCAL_CLIENT_LAST_MODIFIED_DATE}" ]];
 	then
 		echo Updating the client$(test -n "${CLIENT_CANARY_FLAG}" && echo " canary" || true)...
+		rm -f ${METERIAN_JAR_PATH}
 		curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
 	fi
 }
