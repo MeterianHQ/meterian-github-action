@@ -44,7 +44,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.3
+            uses: MeterianHQ/meterian-github-action@v1.0.4
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -72,6 +72,40 @@ Optionally specify a client input argument
         cli_args: --min-security=85
 ```
 **Note:** the above snippet assumes that you are already [checking-out](https://github.com/actions/checkout#checkout-v2) your repository. 
+
+### Configure the action to support Go private modules
+
+When scanning a Go project, to enable private modules to be resolved you need to define the following environment variables in your workflow:
+
+| Environment variable | Description |
+|----------------------|:-----------:|
+| MGA_GITHUB_USER | You GitHub username |
+| MGA_GITHUB_TOKEN | Valid GitHub token (must be defined as secret just as `METERIAN_API_TOKEN` is defined) |
+| GOPRIVATE | Comma-separated list of glob patterns ([in the syntax of Go's path.Match](https://golang.org/pkg/path/filepath/#Match)) of module path prefixes. Find out more [here](https://golang.org/cmd/go/#hdr-Module_configuration_for_non_public_modules) |
+
+An example workflow looks like the following:
+
+```yaml
+name: Meterian Scanner workflow
+
+on: push
+
+jobs:
+    meterian_scan:
+        name: Meterian client scan
+        runs-on: ubuntu-latest
+        steps: 
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Scan project with the Meterian client
+            uses: MeterianHQ/meterian-github-action@v1.0.4
+            env:
+                METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+                MGA_GITHUB_USER: joe-bloggs123
+                MGA_GITHUB_TOKEN: ${{ secrets.MGA_GITHUB_TOKEN }}
+                GOPRIVATE: github.com/MyOrgName
+```
+The above `GOPRIVATE` causes the `go` command to treat as private any module with a path prefix matching the provided pattern (e.g. github.com/MyOrgName/xyzzy)
 
 ## Examples
 
