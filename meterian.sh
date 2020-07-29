@@ -31,6 +31,10 @@ updateClient() {
 	METERIAN_JAR_PATH=$1
 	CLIENT_TARGET_URL=$2
 
+	if [[ "${CLIENT_CANARY_FLAG:-}" == "--canary" ]];then
+		CLIENT_TARGET_URL="https://www.meterian.com/downloads/meterian-cli-canary.jar"
+	fi
+
 	echo "Listing the client jar pre-update"
 	ls -lat ${METERIAN_JAR_PATH}
 	LOCAL_CLIENT_LAST_MODIFIED_DATE=$(getLastModifiedDateForFile $METERIAN_JAR_PATH)
@@ -58,7 +62,7 @@ set +x
 cat /tmp/version.txt 
 
 # launching the client
-java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
+java -Duser.home=/tmp "${CLIENT_VM_PARAMS:-}" -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
 
 # please do not add any command here as we need to preserve the exit status
 # of the meterian client
