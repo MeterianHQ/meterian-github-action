@@ -86,6 +86,7 @@ When scanning a Go project, to enable private modules to be resolved you need to
 | MGA_GITLAB_USER | Your GitLab username |
 | MGA_GITLAB_TOKEN (*) | Valid [GitLab access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) |
 | GOPRIVATE | Comma-separated list of glob patterns ([in the syntax of Go's path.Match](https://golang.org/pkg/path/filepath/#Match)) of module path prefixes. Find out more [here](https://golang.org/cmd/go/#hdr-Module_configuration_for_non_public_modules) |
+
 *(\*) must be defined as secret just as `METERIAN_API_TOKEN` is defined*
 
 An example workflow looks like the following:
