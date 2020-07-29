@@ -12,23 +12,45 @@ getLastModifiedDateForFile() {
 	echo $WHEN
 }
 
-githubCustomConfig() {
-	git config \
-	--global \
-	url."https://${MGA_GITHUB_USER}:${MGA_GITHUB_TOKEN}@github.com".insteadOf \
-	"https://github.com"
+githubPrivateCustomConfig() {
+	echo "machine github.com login "${MGA_GITHUB_USER}" password "${MGA_GITHUB_TOKEN}"" >> "${HOME}/.netrc"
 }
 
-versionControlCustomConfig() {
+bitbucketPrivateCustomConfig() {
+	echo "machine bitbucket.org login "${MGA_BITBUCKET_USER}" password "${MGA_BITBUCKET_APP_PASSWORD}"" >> "${HOME}/.netrc"
+	echo "machine api.bitbucket.org login "${MGA_BITBUCKET_USER}" password "${MGA_BITBUCKET_APP_PASSWORD}"" >> "${HOME}/.netrc"
+}
+
+gitlabPrivateCustomConfig() {
+	echo "machine gitlab.com login "${MGA_GITLAB_USER}" password "${MGA_GITLAB_TOKEN}"" >> "${HOME}/.netrc"
+}
+
+privateVCConfigs() {
 	if [[ -n "${MGA_GITHUB_USER:-}" && -n "${MGA_GITHUB_TOKEN}" ]]; then
-		githubCustomConfig
+		githubPrivateCustomConfig
+	fi
+
+	if [[ -n "${MGA_BITBUCKET_USER:-}" && -n "${MGA_BITBUCKET_APP_PASSWORD:-}" ]]; then
+		bitbucketPrivateCustomConfig
+	fi
+
+	if [[ -n "${MGA_GITLAB_USER:-}" && -n "${MGA_GITLAB_TOKEN:-}" ]]; then
+		gitlabPrivateCustomConfig
 	fi
 }
-versionControlCustomConfig
+
+goVersionControlCustomConfig() {
+	privateVCConfigs
+}
+goVersionControlCustomConfig
 
 updateClient() {
 	METERIAN_JAR_PATH=$1
 	CLIENT_TARGET_URL=$2
+
+	if [[ "${CLIENT_CANARY_FLAG:-}" == "--canary" ]];then
+		CLIENT_TARGET_URL="https://www.meterian.com/downloads/meterian-cli-canary.jar"
+	fi
 
 	LOCAL_CLIENT_LAST_MODIFIED_DATE=$(getLastModifiedDateForFile $METERIAN_JAR_PATH)
 	REMOTE_CLIENT_LAST_MODIFIED_DATE=$(date -d "$(curl -s -L -I "${CLIENT_TARGET_URL}" \
@@ -51,7 +73,7 @@ updateClient "${METERIAN_JAR}" "https://www.meterian.com/downloads/meterian-cli.
 cat /tmp/version.txt 
 
 # launching the client
-java -Duser.home=/tmp  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
+java -Duser.home=/tmp "${CLIENT_VM_PARAMS:-}"  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
 
 # please do not add any command here as we need to preserve the exit status
 # of the meterian client

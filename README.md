@@ -75,13 +75,18 @@ Optionally specify a client input argument
 
 ### Configure the action to support Go private modules
 
-When scanning a Go project, to enable private modules to be resolved you need to define the following environment variables in your workflow:
+When scanning a Go project, to enable private modules to be resolved you need to define the following environment variables in your workflow according to which code hosting site they are hosted on (supported code hosting sites are: GitHub, BitBucket and GitLab):
 
 | Environment variable | Description |
 |----------------------|:-----------:|
 | MGA_GITHUB_USER | You GitHub username |
-| MGA_GITHUB_TOKEN | Valid GitHub token (must be defined as secret just as `METERIAN_API_TOKEN` is defined) |
+| MGA_GITHUB_TOKEN (*) | Valid [GitHub access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) |
+| MGA_BITBUCKET_USER | Your BitBucket username |
+| MGA_BITBUCKET_APP_PASSWORD (*) | Valid [BitBucket application password](https://confluence.atlassian.com/bitbucket/app-passwords-828781300.html) |
+| MGA_GITLAB_USER | Your GitLab username |
+| MGA_GITLAB_TOKEN (*) | Valid [GitLab access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) |
 | GOPRIVATE | Comma-separated list of glob patterns ([in the syntax of Go's path.Match](https://golang.org/pkg/path/filepath/#Match)) of module path prefixes. Find out more [here](https://golang.org/cmd/go/#hdr-Module_configuration_for_non_public_modules) |
+*(\*) must be defined as secret just as `METERIAN_API_TOKEN` is defined*
 
 An example workflow looks like the following:
 
@@ -103,9 +108,34 @@ jobs:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
                 MGA_GITHUB_TOKEN: ${{ secrets.MGA_GITHUB_TOKEN }}
-                GOPRIVATE: github.com/MyOrgName
+                GOPRIVATE: "github.com/MyOrgName"
 ```
 The above `GOPRIVATE` causes the `go` command to treat as private any module with a path prefix matching the provided pattern (e.g. github.com/MyOrgName/xyzzy)
+
+In case you had other private modules hosted on say BitBucket here's how the above example changes:
+
+```yaml
+name: Meterian Scanner workflow
+
+on: push
+
+jobs:
+    meterian_scan:
+        name: Meterian client scan
+        runs-on: ubuntu-latest
+        steps: 
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Scan project with the Meterian client
+            uses: MeterianHQ/meterian-github-action@v1.0.4
+            env:
+                METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+                MGA_GITHUB_USER: joe-bloggs123
+                MGA_GITHUB_TOKEN: ${{ secrets.MGA_GITHUB_TOKEN }}
+                MGA_BITBUCKET_USER: john-doe456
+                MGA_BITBUCKET_APP_PASSWORD: ${{ secrets.MGA_BITBUCKET_APP_PASSWORD }}
+                GOPRIVATE: "github.com/MyOrgName,bitbucket.org/MyOrgName"
+```
 
 ## Examples
 
