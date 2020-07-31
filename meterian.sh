@@ -52,19 +52,17 @@ updateClient() {
 		CLIENT_TARGET_URL="https://www.meterian.com/downloads/meterian-cli-canary.jar"
 	fi
 
-	# LOCAL_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS=$(getLastModifiedDateTimeForFileInSeconds $METERIAN_JAR_PATH)
-	# REMOTE_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS=$(date -d "$(curl -s -L -I "${CLIENT_TARGET_URL}" | grep Last-Modified: | cut -d" " -f2-)" +%s)
-	# if [[ ${REMOTE_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS} -gt ${LOCAL_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS} ]];
-	# then
-	# 	echo Updating the client$(test -n "${CLIENT_CANARY_FLAG}" && echo " canary" || true)...
-	# 	curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
-	# fi
-	echo "Checking client..."
-	curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
+	LOCAL_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS=$(getLastModifiedDateTimeForFileInSeconds $METERIAN_JAR_PATH)
+	REMOTE_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS=$(date -d "$(curl -s -L -I "${CLIENT_TARGET_URL}" | grep Last-Modified: | cut -d" " -f2-)" +%s)
+	if [[ ${REMOTE_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS} -gt ${LOCAL_CLIENT_LAST_MODIFIED_DATE_IN_SECONDS} ]];
+	then
+		echo Updating the client$(test -n "${CLIENT_CANARY_FLAG}" && echo " canary" || true)...
+		curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
+	fi
 }
 
 # meterian jar location
-METERIAN_JAR=/tmp/meterian-cli.jar
+METERIAN_JAR=/meterian-cli.jar
 
 # update the client if necessary
 updateClient "${METERIAN_JAR}" "https://www.meterian.com/downloads/meterian-cli.jar"
