@@ -35,28 +35,28 @@ updateClient() {
 		CLIENT_TARGET_URL="https://www.meterian.com/downloads/meterian-cli-canary.jar"
 	fi
 
-	echo "Listing the client jar pre-update"
-	ls -lat ${METERIAN_JAR_PATH}
-	LOCAL_CLIENT_LAST_MODIFIED_DATE=$(getLastModifiedDateForFile $METERIAN_JAR_PATH)
-	REMOTE_CLIENT_LAST_MODIFIED_DATE=$(date -d "$(curl -s -L -I "${CLIENT_TARGET_URL}" \
-									| grep Last-Modified: | cut -d" " -f2-)" +%F)
-	if [[ "${REMOTE_CLIENT_LAST_MODIFIED_DATE}" > "${LOCAL_CLIENT_LAST_MODIFIED_DATE}" ]];
-	then
+	# echo "Listing the client jar pre-update"
+	# ls -lat ${METERIAN_JAR_PATH}
+	# LOCAL_CLIENT_LAST_MODIFIED_DATE=$(getLastModifiedDateForFile $METERIAN_JAR_PATH)
+	# REMOTE_CLIENT_LAST_MODIFIED_DATE=$(date -d "$(curl -s -L -I "${CLIENT_TARGET_URL}" \
+	# 								| grep Last-Modified: | cut -d" " -f2-)" +%F)
+	# if [[ "${REMOTE_CLIENT_LAST_MODIFIED_DATE}" > "${LOCAL_CLIENT_LAST_MODIFIED_DATE}" ]];
+	# then
 		echo Updating the client$(test -n "${CLIENT_CANARY_FLAG}" && echo " canary" || true)...
 		rm -f ${METERIAN_JAR_PATH}
 		curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
-		echo "Listing the client jar post-update"
-		ls -lat ${METERIAN_JAR_PATH}
-	fi
+		# echo "Listing the client jar post-update"
+		# ls -lat ${METERIAN_JAR_PATH}
+	# fi
 }
 
 # meterian jar location
 METERIAN_JAR=/meterian-cli.jar
 
 # update the client if necessary
-set -x
+#set -x
 updateClient "${METERIAN_JAR}" "https://www.meterian.com/downloads/meterian-cli.jar"
-set +x
+#set +x
 
 # Printing meterian dockerized client version
 cat /tmp/version.txt 
