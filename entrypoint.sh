@@ -28,8 +28,5 @@ fi
 # changing home dir group and ownership
 chown meterian:meterian /home/meterian
 
-# changing ownership to the client to allow later update
-chown meterian:meterian /tmp/meterian-cli.jar
-
 # launch meterian client with the newly created user
 su meterian -c -m /tmp/meterian.sh 2> /dev/null
