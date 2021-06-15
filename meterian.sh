@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Rust user-specific configuration setup
+echo 'export RUSTUP_HOME=/opt/rust/rustup' >> ~/.bashrc
+echo 'export PATH=${PATH}:/opt/rust/cargo/bin' >> ~/.bashrc
+source ~/.bashrc
+
 getLastModifiedDateTimeForFileInSeconds() {
 	MAYBE_FILE=$1
 
