@@ -150,6 +150,7 @@ jobs:
 - [Swift sample project](https://github.com/MeterianHQ/swift-sample-project/blob/master/.github/workflows/main.yml)
 - [Scala sample project](https://github.com/MeterianHQ/scala-sample-project/blob/master/.github/workflows/main.yml)
 - [Rust sample project](https://github.com/MeterianHQ/rust-sample-project/blob/master/.github/workflows/main.yml)
+- [Elixir sample project](https://github.com/MeterianHQ/elixir-sample-project/blob/main/.github/workflows/main.yml)
 
 <br>
 
