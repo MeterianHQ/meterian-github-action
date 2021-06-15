@@ -44,7 +44,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.4
+            uses: MeterianHQ/meterian-github-action@v1.0.6
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -62,7 +62,7 @@ Within your workflow, create a job step that uses the Meterian GitHub action
 ```yaml   
 # jobs.<job_id>.steps 
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.4
+      uses: MeterianHQ/meterian-github-action@v1.0.6
       env:
         METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -104,7 +104,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.4
+            uses: MeterianHQ/meterian-github-action@v1.0.6
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -128,7 +128,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.4
+            uses: MeterianHQ/meterian-github-action@v1.0.6
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -149,6 +149,7 @@ jobs:
 - [Go sample project](https://github.com/MeterianHQ/go-sample-project/blob/master/.github/workflows/main.yml)
 - [Swift sample project](https://github.com/MeterianHQ/swift-sample-project/blob/master/.github/workflows/main.yml)
 - [Scala sample project](https://github.com/MeterianHQ/scala-sample-project/blob/master/.github/workflows/main.yml)
+- [Rust sample project](https://github.com/MeterianHQ/rust-sample-project/blob/master/.github/workflows/main.yml)
 
 <br>
 
