@@ -6,6 +6,10 @@ inputs:
     cli_args:
         required: false
         description: Meterian client parameters
+    oss:
+        required: false
+        description: Open Source Software flag
+        default: false
 runs:
     using: docker
     image: Dockerfile
