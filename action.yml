@@ -11,6 +11,7 @@ runs:
     image: Dockerfile
     args: 
         - ${{ inputs.cli_args }}
+        - ${{ inputs.oss }}
 branding: 
     icon: zoom-in
     color: blue
