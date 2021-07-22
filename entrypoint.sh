@@ -4,7 +4,7 @@ set -e
 set -o pipefail
 
 # check that the Meterian API token is correctly set
-METERIAN_API_TOKEN=${METERIAN_API_TOKEN:?'METERIAN_API_TOKEN missing. Ensure that this secret is set correctly.'}
+# METERIAN_API_TOKEN=${METERIAN_API_TOKEN:?'METERIAN_API_TOKEN missing. Ensure that this secret is set correctly.'}
 
 # prepare the script file and version file
 cp /root/meterian.sh /tmp/meterian.sh
