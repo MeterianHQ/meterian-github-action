@@ -3,6 +3,8 @@
 set -e
 set -o pipefail
 
+export ORIGINAL_PATH=$PATH
+
 OSS="$2"
 if [[ "$OSS" == "true" ]]; then
     export OSS_TRUE="-Dcli.oss.enabled=true"

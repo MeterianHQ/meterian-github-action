@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# Adjusting PATH so that all needed tools are found
+echo 'export PATH=${ORIGINAL_PATH}' >> ~/.bashrc
+
 # Rust user-specific configuration setup
 echo 'export RUSTUP_HOME=/opt/rust/rustup' >> ~/.bashrc
-echo 'export PATH=${PATH}:/opt/rust/cargo/bin' >> ~/.bashrc
 source ~/.bashrc
 
 getLastModifiedDateTimeForFileInSeconds() {
