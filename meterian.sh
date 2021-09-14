@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# Adjusting PATH so that all needed tools are found
+echo 'export PATH=${ORIGINAL_PATH}' >> ~/.bashrc
+
 # Rust user-specific configuration setup
 echo 'export RUSTUP_HOME=/opt/rust/rustup' >> ~/.bashrc
-echo 'export PATH=${PATH}:/opt/rust/cargo/bin' >> ~/.bashrc
 source ~/.bashrc
 
 getLastModifiedDateTimeForFileInSeconds() {
@@ -78,7 +80,7 @@ updateClient "${METERIAN_JAR}" "https://www.meterian.com/downloads/meterian-cli.
 cat /tmp/version.txt 
 
 # launching the client
-java -Duser.home=/tmp $(echo "${CLIENT_VM_PARAMS:-}")  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
+java -Duser.home=/tmp $(echo "${CLIENT_VM_PARAMS:-} ${OSS_TRUE:-}")  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
 
 # please do not add any command here as we need to preserve the exit status
 # of the meterian client

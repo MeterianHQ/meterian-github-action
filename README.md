@@ -25,6 +25,10 @@ Once registered to Meterian with an eligible plan, you can generate an API token
 
 **Optional** Any additional Meterian CLI options. Find out more about these in the [Meterian documentation](https://docs.meterian.io/).
 
+#### `oss`
+
+**Optional** The Open Source Software flag. When set to `true` a project is scanned as Open Source Software and will not require authentication.
+
 ### General example workflow
 
 If you don't have an existing [**workflow**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions) within your repository, you can hit the ground running by using the following snippet
@@ -53,6 +57,28 @@ Save this in a `main.yml` file in the `.github/workflows` folder, in the root of
 .github
 └── workflows
     └── main.yml
+```
+
+If the project you are planning to scan is open source, you can simply use this example which won't require you to specify an authentication token
+
+```yaml
+#main.yml
+
+name: Meterian Scanner workflow
+
+on: push
+
+jobs:
+    meterian_scan:
+        name: Meterian client scan
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Meterian Scanner
+            uses: MeterianHQ/meterian-github-action@v1.0.6
+            with:
+              oss: true
 ```
 
 ### Integrating the action with an existing workflow

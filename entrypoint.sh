@@ -3,13 +3,20 @@
 set -e
 set -o pipefail
 
-# check that the Meterian API token is correctly set
-METERIAN_API_TOKEN=${METERIAN_API_TOKEN:?'METERIAN_API_TOKEN missing. Ensure that this secret is set correctly.'}
+export ORIGINAL_PATH=$PATH
+
+OSS="$2"
+if [[ "$OSS" == "true" ]]; then
+    export OSS_TRUE="-Dcli.oss.enabled=true"
+else
+    # check that the Meterian API token is correctly set
+    METERIAN_API_TOKEN=${METERIAN_API_TOKEN:?'METERIAN_API_TOKEN missing. Ensure that this secret is set correctly.'}
+fi
 
 # prepare the script file and version file
 cp /root/meterian.sh /tmp/meterian.sh
 cp /root/version.txt /tmp/version.txt
-export METERIAN_CLI_ARGS=$*
+export METERIAN_CLI_ARGS="$1"
 
 # creating user meterian necessary for dependency management tools that require it (e.g. cocoapods)
 currDir=$(pwd)
