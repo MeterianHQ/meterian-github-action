@@ -3,6 +3,9 @@
 set -e
 set -o pipefail
 
+echo Image path results to be:
+echo $PATH
+
 # check that the Meterian API token is correctly set
 # METERIAN_API_TOKEN=${METERIAN_API_TOKEN:?'METERIAN_API_TOKEN missing. Ensure that this secret is set correctly.'}
 
