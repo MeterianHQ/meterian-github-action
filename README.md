@@ -178,6 +178,7 @@ jobs:
 - [Rust sample project](https://github.com/MeterianHQ/rust-sample-project/blob/master/.github/workflows/main.yml)
 - [Elixir sample project](https://github.com/MeterianHQ/elixir-sample-project/blob/main/.github/workflows/main.yml)
 - [Perl sample project](https://github.com/MeterianHQ/perl-sample-project/blob/main/.github/workflows/main.yml)
+- [C++ sample project](https://github.com/MeterianHQ/cpp-sample-project/blob/master/.github/workflows/main.yml)
 
 <br>
 
