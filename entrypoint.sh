@@ -3,6 +3,9 @@
 set -e
 set -o pipefail
 
+# rust-specifics
+chmod -R 777 /opt/rust/
+
 export ORIGINAL_PATH=$PATH
 
 OSS="$2"
