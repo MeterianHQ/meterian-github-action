@@ -81,6 +81,16 @@ cat /tmp/version.txt
 
 # launching the client
 java -Duser.home=/tmp $(echo "${CLIENT_VM_PARAMS:-} ${OSS_TRUE:-}")  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
+cliExitCode=$?
 
+echo "TESTING PR CREATION BY GH ACTION!" >> README.md
+
+prArgs="$(echo "$(git status -s)" | grep -oE "^.*M.*" | cut -d' ' -f3 | xargs)"
+if [[ "$prArgs" != "" ]];
+then
+	python3 /tmp/submit_pr.py $prArgs
+fi
+
+exit $cliExitCode
 # please do not add any command here as we need to preserve the exit status
 # of the meterian client

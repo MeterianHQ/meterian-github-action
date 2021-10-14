@@ -19,6 +19,7 @@ fi
 # prepare the script file and version file
 cp /root/meterian.sh /tmp/meterian.sh
 cp /root/version.txt /tmp/version.txt
+cp /root/submit_pr.py /tmp/submit_pr.py
 export METERIAN_CLI_ARGS="$1"
 
 # creating user meterian necessary for dependency management tools that require it (e.g. cocoapods)
