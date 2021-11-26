@@ -2,13 +2,14 @@
 
 set -e
 set -o pipefail
+set -x
 
 # rust-specifics
 chmod -R 777 /opt/rust/
 
 export ORIGINAL_PATH=$PATH
 
-OSS="$2"
+OSS="$INPUT_OSS"
 if [[ "$OSS" == "true" ]]; then
     export OSS_TRUE="-Dcli.oss.enabled=true"
 else
@@ -19,8 +20,13 @@ fi
 # prepare the script file and version file
 cp /root/meterian.sh /tmp/meterian.sh
 cp /root/version.txt /tmp/version.txt
-cp /root/submit_pr.py /tmp/submit_pr.py
-export METERIAN_CLI_ARGS="$1"
+cp /root/meterian-bot.py /tmp/meterian-bot.py
+export METERIAN_CLI_ARGS="$INPUT_CLI_ARGS"
+
+# ensuring that if the autofix is enabled the client produces the report.json file needed to know the autofix results
+if [[ "${INPUT_AUTOFIX:-}" != "" ]];then
+    export METERIAN_CLI_ARGS="$METERIAN_CLI_ARGS --autofix:${INPUT_AUTOFIX} --report-json=report.json"
+fi
 
 # creating user meterian necessary for dependency management tools that require it (e.g. cocoapods)
 currDir=$(pwd)
@@ -40,4 +46,4 @@ fi
 chown meterian:meterian /home/meterian
 
 # launch meterian client with the newly created user
-su meterian -c -m /tmp/meterian.sh 2> /dev/null
+su meterian -c -m /tmp/meterian.sh #2> /dev/null

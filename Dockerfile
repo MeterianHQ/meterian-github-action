@@ -6,7 +6,7 @@ LABEL "maintainer"="Bruno Bossola <bruno@meterian.io>, Mani Sarkar <sadhak001@gm
 
 RUN pip3 install --ignore-installed PyGithub
 
-COPY ./*.sh ./
-COPY ./submit_pr.py ./
+COPY entrypoint.sh meterian.sh ./
+COPY ./meterian-bot.py ./
 
 ENTRYPOINT ["/root/entrypoint.sh"]

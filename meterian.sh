@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # Adjusting PATH so that all needed tools are found
 echo 'export PATH=${ORIGINAL_PATH}' >> ~/.bashrc
 
@@ -83,12 +83,12 @@ cat /tmp/version.txt
 java -Duser.home=/tmp $(echo "${CLIENT_VM_PARAMS:-} ${OSS_TRUE:-}")  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
 cliExitCode=$?
 
-echo "TESTING PR CREATION BY GH ACTION!" >> README.md
 
 prArgs="$(echo "$(git status -s)" | grep -oE "^.*M.*" | cut -d' ' -f3 | xargs)"
-if [[ "$prArgs" != "" ]];
+if [[ "${INPUT_AUTOFIX:-}" != "" ]];
 then
-	python3 /tmp/submit_pr.py $prArgs
+	export METERIAN_AUTOFIX_REPORT_PATH="$(pwd)/report.json"
+	python3 /tmp/meterian-bot.py $prArgs
 fi
 
 exit $cliExitCode
