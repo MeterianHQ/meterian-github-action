@@ -19,6 +19,7 @@ runs:
     args: 
         - ${{ inputs.cli_args }}
         - ${{ inputs.oss }}
+        - ${{ inputs.autofix }}
 branding: 
     icon: zoom-in
     color: blue

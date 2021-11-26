@@ -172,7 +172,7 @@ if "GITHUB_TOKEN" in os.environ:
             if len(open_prs.get_page(0)) > 0:
                 pr = open_prs.get_page(0)[0]
                 if commit_changes(repo, relative_file_path, commit_message, data, head_branch, GH_AUTHOR):
-                    pr.edit(title=new_pr_title, title=new_pr_body)
+                    pr.edit(title=new_pr_title, body=new_pr_body)
                     print("Existing pull request was found and updated, review it here:\n" + pr.html_url)
                 else:
                     print("Existing pull request was found, review it here:\n" + pr.html_url)
