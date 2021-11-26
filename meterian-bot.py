@@ -185,7 +185,7 @@ if "GITHUB_TOKEN" in os.environ:
                     sys.exit(0)
 
             commit_changes(repo, relative_file_path, commit_message, data, head_branch, GH_AUTHOR)
-            new_pr = create_pull(new_pr_title, new_pr_body, head_branch, base_branch)
+            new_pr = create_pull(repo, new_pr_title, new_pr_body, head_branch, base_branch)
             print("A new pull request has been opened, review it here:\n" + new_pr.html_url)
     else:
         print("No manifest files were updated as result of the autofix, but some problems were detected; Opening an issue to display these...")

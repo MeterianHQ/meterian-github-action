@@ -84,7 +84,7 @@ java -Duser.home=/tmp $(echo "${CLIENT_VM_PARAMS:-} ${OSS_TRUE:-}")  -jar ${METE
 cliExitCode=$?
 
 
-prArgs="$(echo "$(git status -s)" | grep -oE "^.*M.*" | cut -d' ' -f3 | xargs)"
+prArgs="$(echo "$(git ls-files -m)" | xargs)"
 if [[ "${INPUT_AUTOFIX:-}" != "" ]];
 then
 	export METERIAN_AUTOFIX_REPORT_PATH="$(pwd)/report.json"
