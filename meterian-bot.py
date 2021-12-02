@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import requests
+import pathlib
 
 from github import Github
 from github import InputGitAuthor
@@ -96,6 +97,24 @@ def parse_changes(args):
             changes.append(arg)
     return changes
 
+def verify_branch_exclusion_by_env_glob(branch, target_conf_env_var_keyword, message=""):
+    if target_conf_env_var_keyword in os.environ:
+        try:
+            globs = os.environ[target_conf_env_var_keyword].split(" ")
+            for glob in globs:
+                # **/* is equivalent to ** in GitHub Actions Workflow Syntax documentation
+                glob = glob.replace("**", "**/*")
+                if not pathlib.PurePath(branch).match(glob):
+                    print(message)
+                    sys.exit(0)
+        except:
+            pass
+
+def verify_branch_can_open_pull_requests(branch):
+    verify_branch_exclusion_by_env_glob(branch, "INPUT_AUTOFIX_PR_BRANCHES", message="Workflows triggered from branch " + branch + " are prohibited from opening pull requests. Aborting operation.")
+
+def verify_branch_can_open_issues(branch):
+    verify_branch_exclusion_by_env_glob(branch, "INPUT_AUTOFIX_ISSUE_BRANCHES", message="Workflows triggered from branch " + branch + " are prohibited from opening issues. Aborting operation.")
 
 
 
@@ -149,7 +168,13 @@ if "GITHUB_TOKEN" in os.environ:
         print("Unexpected error raised while generating GitHub message")
         sys.exit(1)
 
+    base_branch = os.environ["GITHUB_REF"].replace("refs/heads/","")
     if GIT_BOT_REQUEST_BODY["options"]["autofix"] :
+        if "refs/tags" in os.environ["GITHUB_REF"]:
+            print("Workflows triggered from tags are unsupported. Aborting operation. ")
+            sys.exit(1)
+
+        verify_branch_can_open_pull_requests(base_branch)
 
         print("The manifest file(s) were updated; opening a pull request...")
         changes = parse_changes(sys.argv[1:])
@@ -157,11 +182,15 @@ if "GITHUB_TOKEN" in os.environ:
             absolute_file_path = open(os.environ["GITHUB_WORKSPACE"]+"/"+relative_file_path)
             data = absolute_file_path.read()
 
+            #TODO should be calling gitbot for an updated message tailored to the specific manifest file (especially when multiple)
+            #     (having done the appropriate tweaks to the report.json excluding any other change besides the one relative to a given manifest file)
             new_pr_title = gh_message["title"]
             new_pr_body = gh_message["message"] + "\n Test"
 
             head_branch = "meterian-bot/autofix/" + relative_file_path
-            base_branch = os.environ["GITHUB_REF"].replace("refs/heads/","")
+            if base_branch != repo.default_branch:
+                head_branch = base_branch + "_" + head_branch
+
             commit_message = "Update " + relative_file_path + " [skip ci]"
 
             # <head-owner|head-organization>:branch-name
@@ -188,6 +217,8 @@ if "GITHUB_TOKEN" in os.environ:
             new_pr = create_pull(repo, new_pr_title, new_pr_body, head_branch, base_branch)
             print("A new pull request has been opened, review it here:\n" + new_pr.html_url)
     else:
+        verify_branch_can_open_issues(base_branch)
+
         print("No manifest files were updated as result of the autofix, but some problems were detected; Opening an issue to display these...")
         new_issue_title = gh_message["title"]
         new_issue_body = gh_message["message"]
