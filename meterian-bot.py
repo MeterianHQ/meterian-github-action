@@ -107,6 +107,8 @@ def verify_branch_exclusion_by_env_glob(branch, target_conf_env_var_keyword, mes
                 if not pathlib.PurePath(branch).match(glob):
                     print(message)
                     sys.exit(0)
+        except SystemExit:
+            sys.exit(0)
         except:
             pass
 
