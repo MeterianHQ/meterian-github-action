@@ -6,6 +6,7 @@ import pathlib
 
 from github import Github
 from github import InputGitAuthor
+from github import GithubException
 
 def replace_if(old, new, condition):
     if condition:
@@ -50,7 +51,6 @@ def to_branch_ref(name):
     return ref
 
 def commit_changes(repo, path, commit_message, new_content, branch, author):
-
     source = repo.get_branch(os.environ["GITHUB_REF"].replace("refs/heads/",""))
 
     if any(branch == repo_branch.name for repo_branch in repo.get_branches()):
@@ -66,13 +66,15 @@ def commit_changes(repo, path, commit_message, new_content, branch, author):
     else:
         try:
             print("Creating new branch " + branch)
-            the_ref = to_branch_ref(branch)
-            repo.create_git_ref(ref=the_ref, sha=source.commit.sha)
+            repo.create_git_ref(ref=as_branch_ref(branch), sha=source.commit.sha)
             gh_contents = repo.get_contents(path, ref=branch)
             repo.update_file(gh_contents.path, commit_message, new_content, gh_contents.sha, branch=branch, committer=author)
             return True
+        except GithubException as gex:
+            print("Github was unable to create and commit to branch " + branch + "\n"+ str(gex))
+            sys.exit(1)
         except Exception:
-            print("unexpected error occurred while crating new branch " + branch)
+            print("Unexpected error occurred while crating new branch " + branch)
             sys.exit(1)
 
 def create_pull(repo, title, body, head, base):
@@ -80,7 +82,6 @@ def create_pull(repo, title, body, head, base):
     if METERIAN_BOT_PR_LABEL not in new_pr.get_labels():
         new_pr.add_to_labels(METERIAN_BOT_PR_LABEL)
     return new_pr
-
 
 def generate_gh_message(body):
     headers = {"Content-Type": "application/json", "Authorization": "token " + os.environ["METERIAN_API_TOKEN"]}
@@ -118,6 +119,35 @@ def verify_branch_can_open_pull_requests(branch):
 def verify_branch_can_open_issues(branch):
     verify_branch_exclusion_by_env_glob(branch, "INPUT_AUTOFIX_ISSUE_BRANCHES", message="Workflows triggered from branch " + branch + " are prohibited from opening issues. Aborting operation.")
 
+def as_branch_name(branch_ref):
+    return branch_ref.replace("refs/heads/", "")
+
+def as_branch_ref(branch_name):
+    return "refs/heads/" + branch_name
+
+def create_new_branch_name(repo, postfix):
+    tmp_branch_name = "meterian-bot/autofix/" + postfix
+    base_branch = as_branch_name(os.environ["GITHUB_REF"])
+    if base_branch != repo.default_branch:
+        tmp_branch_name = base_branch + "_" + tmp_branch_name
+
+    try:
+        new_branch_ref = to_branch_ref(tmp_branch_name)
+        return as_branch_name(new_branch_ref)
+    except RuntimeError as re:
+        print("Unable to create new branch name. " + str(re))
+
+    return None
+
+def search_issues(repo, keyword):
+    all = repo.legacy_search_issues(state="open", keyword=keyword)
+    closed_ones = repo.legacy_search_issues(state="closed", keyword=keyword)
+
+    for closed in closed_ones:
+        if closed not in all:
+            all.append(closed)
+
+    return all
 
 
 meterian_report_file = os.environ["METERIAN_AUTOFIX_REPORT_PATH"]
@@ -170,7 +200,7 @@ if "GITHUB_TOKEN" in os.environ:
         print("Unexpected error raised while generating GitHub message")
         sys.exit(1)
 
-    base_branch = os.environ["GITHUB_REF"].replace("refs/heads/","")
+    base_branch = as_branch_name(os.environ["GITHUB_REF"])
     if GIT_BOT_REQUEST_BODY["options"]["autofix"] :
         if "refs/tags" in os.environ["GITHUB_REF"]:
             print("Workflows triggered from tags are unsupported. Aborting operation. ")
@@ -181,19 +211,21 @@ if "GITHUB_TOKEN" in os.environ:
         print("The manifest file(s) were updated; opening a pull request...")
         changes = parse_changes(sys.argv[1:])
         for relative_file_path in changes:
-            absolute_file_path = open(os.environ["GITHUB_WORKSPACE"]+"/"+relative_file_path)
-            data = absolute_file_path.read()
+            print("Creating branch for changes on file " + relative_file_path)
+
+            head_branch = create_new_branch_name(repo, relative_file_path)
+            if head_branch is None:
+                continue
 
             #TODO should be calling gitbot for an updated message tailored to the specific manifest file (especially when multiple)
             #     (having done the appropriate tweaks to the report.json excluding any other change besides the one relative to a given manifest file)
             new_pr_title = gh_message["title"]
             new_pr_body = gh_message["message"] + "\n Test"
 
-            head_branch = "meterian-bot/autofix/" + relative_file_path
-            if base_branch != repo.default_branch:
-                head_branch = base_branch + "_" + head_branch
-
             commit_message = "Update " + relative_file_path + " [skip ci]"
+
+            absolute_file_path = open(os.environ["GITHUB_WORKSPACE"]+"/"+relative_file_path)
+            data = absolute_file_path.read()
 
             # <head-owner|head-organization>:branch-name
             head_filter = repo.organization.login if repo.organization is not None else repo.owner.login
@@ -222,17 +254,21 @@ if "GITHUB_TOKEN" in os.environ:
         verify_branch_can_open_issues(base_branch)
 
         print("No manifest files were updated as result of the autofix, but some problems were detected; Opening an issue to display these...")
-        new_issue_title = gh_message["title"]
-        new_issue_body = gh_message["message"]
-        for issue in repo.get_issues(state="all", labels=[METERIAN_BOT_ISSUE_LABEL]):
-            if issue.title == new_issue_title and issue.body == new_issue_body:
-                if issue.state == "open":
-                    print("The issue has already been opened, view it here:\n" + issue.html_url)
-                else:
-                    print("The issue already exists and it has been closed, view it here:\n" + issue.html_url)
+        if repo.has_issues: # checks whether the repo has actually got issues enabled
+            new_issue_title = gh_message["title"]
+            new_issue_body = gh_message["message"]
 
-        new_issue = repo.create_issue(title=new_issue_title, body=new_issue_body, labels=[METERIAN_BOT_ISSUE_LABEL])
-        print("A new issue has been opened, view it here:\n" + new_issue.html_url)
+            issues = search_issues(repo, new_issue_title)
+            for issue in issues:
+                if METERIAN_BOT_ISSUE_LABEL in issue.labels and issue.title == new_issue_title and issue.body == new_issue_body:
+                    if issue.state == "open":
+                        print("The issue has already been opened, view it here:\n" + issue.html_url)
+                    else:
+                        print("The issue already exists and it has been closed, view it here:\n" + issue.html_url)
 
+            new_issue = repo.create_issue(title=new_issue_title, body=new_issue_body, labels=[METERIAN_BOT_ISSUE_LABEL])
+            print("A new issue has been opened, view it here:\n" + new_issue.html_url)
+        else:
+            print("This repository does not have issues enabled, no issues will be opened")
 else:
     print("GITHUB_TOKEN was not provided, no action can be taken!")
