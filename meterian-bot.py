@@ -84,8 +84,8 @@ def create_pull(repo, title, body, head, base):
     return new_pr
 
 def generate_gh_message(body):
-    headers = {"Content-Type": "application/json", "Authorization": "token " + os.environ["METERIAN_API_TOKEN"]}
-    response = requests.post("https://services3.qa.meterian.io/api/v1/gitbot/results/parse", data = json.dumps(body), headers = headers)
+    headers = {"Content-Type": "application/json"}
+    response = requests.post("https://services3.www.meterian.io/api/v1/gitbot/results/parse", data = json.dumps(body), headers = headers)
     if response.status_code == 200:
         return json.loads(response.text)
     else:
