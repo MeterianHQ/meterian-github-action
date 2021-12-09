@@ -206,9 +206,10 @@ if "GITHUB_TOKEN" in os.environ:
             print("Workflows triggered from tags are unsupported. Aborting operation. ")
             sys.exit(1)
 
+        print("The manifest file(s) were updated; opening a pull request...")
+
         verify_branch_can_open_pull_requests(base_branch)
 
-        print("The manifest file(s) were updated; opening a pull request...")
         changes = parse_changes(sys.argv[1:])
         for relative_file_path in changes:
             print("Creating branch for changes on file " + relative_file_path)
@@ -251,9 +252,10 @@ if "GITHUB_TOKEN" in os.environ:
             new_pr = create_pull(repo, new_pr_title, new_pr_body, head_branch, base_branch)
             print("A new pull request has been opened, review it here:\n" + new_pr.html_url)
     else:
+        print("No manifest files were updated as result of the autofix, but some problems were detected; Opening an issue to display these...")
+
         verify_branch_can_open_issues(base_branch)
 
-        print("No manifest files were updated as result of the autofix, but some problems were detected; Opening an issue to display these...")
         if repo.has_issues: # checks whether the repo has actually got issues enabled
             new_issue_title = gh_message["title"]
             new_issue_body = gh_message["message"]
