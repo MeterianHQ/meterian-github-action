@@ -2,7 +2,6 @@
 
 set -e
 set -o pipefail
-set -x
 
 # rust-specifics
 chmod -R 777 /opt/rust/
@@ -46,4 +45,4 @@ fi
 chown meterian:meterian /home/meterian
 
 # launch meterian client with the newly created user
-su meterian -c -m /tmp/meterian.sh #2> /dev/null
+su meterian -c -m /tmp/meterian.sh 2> /dev/null
