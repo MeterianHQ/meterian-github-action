@@ -139,14 +139,8 @@ def create_new_branch_name(repo, postfix):
 
     return None
 
-def search_issues(repo, keyword):
-    all = repo.legacy_search_issues(state="open", keyword=keyword)
-    closed_ones = repo.legacy_search_issues(state="closed", keyword=keyword)
-
-    for closed in closed_ones:
-        if closed not in all:
-            all.append(closed)
-
+def search_issues(gh, repo_name, keyword):
+    all = gh.search_issues(query='repo:' + repo_name + ' type:issue ' + keyword + ' in:title')
     return all
 
 
@@ -218,8 +212,6 @@ if "GITHUB_TOKEN" in os.environ:
             if head_branch is None:
                 continue
 
-            #TODO should be calling gitbot for an updated message tailored to the specific manifest file (especially when multiple)
-            #     (having done the appropriate tweaks to the report.json excluding any other change besides the one relative to a given manifest file)
             new_pr_title = gh_message["title"]
             new_pr_body = gh_message["message"] + "\n Test"
 
@@ -252,7 +244,7 @@ if "GITHUB_TOKEN" in os.environ:
             new_pr = create_pull(repo, new_pr_title, new_pr_body, head_branch, base_branch)
             print("A new pull request has been opened, review it here:\n" + new_pr.html_url)
     else:
-        print("No manifest files were updated as result of the autofix, but some problems were detected; Opening an issue to display these...")
+        print("No manifest files were updated as result of the autofix, but some problems were detected; opening an issue to display these...")
 
         verify_branch_can_open_issues(base_branch)
 
@@ -260,7 +252,7 @@ if "GITHUB_TOKEN" in os.environ:
             new_issue_title = gh_message["title"]
             new_issue_body = gh_message["message"]
 
-            issues = search_issues(repo, new_issue_title)
+            issues = search_issues(gh, os.environ["GITHUB_REPOSITORY"], new_issue_title)
             for issue in issues:
                 if METERIAN_BOT_ISSUE_LABEL in issue.labels and issue.title == new_issue_title and issue.body == new_issue_body:
                     if issue.state == "open":
