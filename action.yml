@@ -10,15 +10,21 @@ inputs:
         required: false
         description: Open Source Software flag to instruct the client to avoid authenticating the scan as the project being scanned is open source.
         default: false
-    autofix:
+    autofix_security:
         required: false
-        description: The program(s) to use for the autofix. When provided, dependencies versions in the project manifest file(s) will be automatically fixed.
-    autofix_pr_branches:
+        description: What reach to use to update vulnerable dependencies
+    autofix_stability:
         required: false
-        description: A space separated glob list matching the names of the branches that are allowed to open pull requests when triggering a workflow
-    autofix_issue_branches:
+        description: What reach to use to update outdated dependencies
+    autofix_with_pr:
         required: false
-        description: A space separated glob list matching the names of the branches that are allowed to open issues when triggering a workflow
+        description: Flag to instruct whether a pull request should be opened as a result of the autofix
+    autofix_with_issue:
+        required: false
+        description: Flag to instruct whether an issue should be opened as a result of the autofix
+    autofix_with_report:
+        required: false
+        description: Flag to instruct whether a pull request also including a PDF report should be opened as a result of the autofix
 
 runs:
     using: docker

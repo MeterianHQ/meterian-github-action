@@ -85,9 +85,9 @@ cliExitCode=$?
 
 
 prArgs="$(echo "$(git ls-files -m)" | xargs)"
-if [[ "${INPUT_AUTOFIX:-}" != "" ]];
-then
-	export METERIAN_AUTOFIX_REPORT_PATH="$(pwd)/report.json"
+if [[ -n "${INPUT_AUTOFIX_WITH_ISSUE:-}" || -n "${INPUT_AUTOFIX_WITH_PR:-}" || -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]];then
+	export METERIAN_AUTOFIX_JSON_REPORT_PATH="$(pwd)/report.json"
+	export METERIAN_AUTOFIX_PDF_REPORT_PATH="$(pwd)/report.pdf"
 	python3 /tmp/meterian-bot.py $prArgs
 fi
 
