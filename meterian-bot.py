@@ -125,27 +125,6 @@ def parse_changes(args):
             changes.append(arg)
     return changes
 
-def verify_branch_exclusion_by_env_glob(branch, target_conf_env_var_keyword, message=""):
-    if target_conf_env_var_keyword in os.environ:
-        try:
-            globs = os.environ[target_conf_env_var_keyword].split(" ")
-            for glob in globs:
-                # **/* is equivalent to ** in GitHub Actions Workflow Syntax documentation
-                glob = glob.replace("**", "**/*")
-                if not pathlib.PurePath(branch).match(glob):
-                    print(message)
-                    sys.exit(0)
-        except SystemExit:
-            sys.exit(0)
-        except:
-            pass
-
-def verify_branch_can_open_pull_requests(branch):
-    verify_branch_exclusion_by_env_glob(branch, "INPUT_AUTOFIX_PR_BRANCHES", message="Workflows triggered from branch " + branch + " are prohibited from opening pull requests. Aborting operation.")
-
-def verify_branch_can_open_issues(branch):
-    verify_branch_exclusion_by_env_glob(branch, "INPUT_AUTOFIX_ISSUE_BRANCHES", message="Workflows triggered from branch " + branch + " are prohibited from opening issues. Aborting operation.")
-
 def as_branch_name(branch_ref):
     return branch_ref.replace("refs/heads/", "")
 
