@@ -137,7 +137,7 @@ jobs:
               autofix_stability: safe
               autofix_with_pr: true
 ```
-The workflow above will cause the Meterian Github action to scan your repository and perform the autofix fixing any vulnerable dependency with either the latest safe patch or minor version update where applicable, and fixing any outdated dependency with the latest safe path version update.
+The workflow above will cause the Meterian Github action to scan your repository and perform the autofix fixing any vulnerable dependency with either the latest safe patch or minor version update, and fixing any outdated dependency with the latest safe patch version update where applicable. Following the fixes if changes have been made within the repo as instructed by the `autofix_with_pr` flag, a pull request will be opened detailing on these changes.
 
 **Note**: as of now the autofix will only work on the following manifest files:
 - pom.xml (Java, maven)
