@@ -170,11 +170,12 @@ def search_issues(gh, repo_name, keyword):
     all = gh.search_issues(query='repo:' + repo_name + ' type:issue ' + keyword + ' in:title')
     return all
 
+print()
 
 # Check for the presence of the report.json and exit if is not the case
 meterian_report_file = os.environ["METERIAN_AUTOFIX_JSON_REPORT_PATH"]
 if os.path.exists(meterian_report_file) is False:
-    print(meterian_report_file + "was not found, impossible to load autofix results!")
+    print(meterian_report_file + " was not found, impossible to load autofix results!")
     sys.exit(1)
 
 # Check whether the workflow was triggered from a tag and exit if it's the case
@@ -232,6 +233,13 @@ if "GITHUB_TOKEN" in os.environ:
     # Load Meterian report
     meterian_report = json.load(open(meterian_report_file))
 
+    meterian_report_pdf=None
+    if OPEN_PR_WITH_REPORT:
+        meterian_report_pdf = os.environ["METERIAN_AUTOFIX_PDF_REPORT_PATH"]
+        OPEN_PR_WITH_REPORT = os.path.exists(meterian_report_pdf)
+        if OPEN_PR_WITH_REPORT is False:
+            print("The PDF report was not found, it won't be included in the PR")
+
     if OPEN_PR or OPEN_PR_WITH_REPORT:
         GIT_BOT_REQUEST_BODY = {
             "report": {},
@@ -285,8 +293,9 @@ if "GITHUB_TOKEN" in os.environ:
                     pr = open_prs.get_page(0)[0]
                     updates_were_performed = commit_changes_to_file(repo, relative_file_path, commit_message, data, head_branch, GH_AUTHOR)
                     if OPEN_PR_WITH_REPORT:
-                        data = open(os.environ["METERIAN_AUTOFIX_PDF_REPORT_PATH"], "rb").read()
-                        updates_were_performed |= commit_changes_to_file(repo, "report.pdf", "Add PDF report [skip ci]", data, head_branch, GH_AUTHOR)
+                        data = open(meterian_report_pdf, "rb").read()
+                        commit_verb = "Update" if "report.pdf" in changes else "Add"
+                        updates_were_performed |= commit_changes_to_file(repo, "report.pdf", commit_verb + " PDF report [skip ci]", data, head_branch, GH_AUTHOR)
                     if updates_were_performed:
                         pr.edit(title=new_pr_title, body=new_pr_body)
                         print("Existing pull request was found and updated, review it here:\n" + pr.html_url)
@@ -302,8 +311,9 @@ if "GITHUB_TOKEN" in os.environ:
 
                 changes_committed = commit_changes_to_file(repo, relative_file_path, commit_message, data, head_branch, GH_AUTHOR)
                 if OPEN_PR_WITH_REPORT:
-                    data = open(os.environ["METERIAN_AUTOFIX_PDF_REPORT_PATH"]).read()
-                    changes_committed |= commit_changes_to_file(repo, relative_file_path, commit_message, data, head_branch, GH_AUTHOR)
+                    commit_verb = "Update" if "report.pdf" in changes else "Add"
+                    data = open(meterian_report_pdf).read()
+                    changes_committed |= commit_changes_to_file(repo, "report.pdf", commit_verb + " PDF report [skip ci]", data, head_branch, GH_AUTHOR)
                 if changes_committed:
                     new_pr = create_pull(repo, new_pr_title, new_pr_body, head_branch, base_branch)
                     print("A new pull request has been opened, review it here:\n" + new_pr.html_url)

@@ -32,9 +32,11 @@ runs:
     args: 
         - ${{ inputs.cli_args }}
         - ${{ inputs.oss }}
-        - ${{ inputs.autofix }}
-        - ${{ inputs.autofix_pr_branches }}
-        - ${{ inputs.autofix_issue_branches }}
+        - ${{ inputs.autofix_security }}
+        - ${{ inputs.autofix_stability }}
+        - ${{ inputs.autofix_with_pr }}
+        - ${{ inputs.autofix_with_issue }}
+        - ${{ inputs.autofix_with_report }}
 branding: 
     icon: zoom-in
     color: blue
