@@ -1,4 +1,4 @@
-FROM meterian/github-action:latest
+FROM meterian/cli:latest-gha
 
 LABEL "repository"="http://github.com/MeterianHQ/meterian-github-action"
 LABEL "homepage"="http://github.com/MeterianHQ"
