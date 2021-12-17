@@ -8,7 +8,7 @@ A list of supported languages can be found [here](https://docs.meterian.io/langu
 
 ### Pre-required configuration
 
-In order to use this action you require an authentication API token from Meterian which is only available for paid plans.
+For usage on closed source repositories you require an authentication API token from Meterian which is only available for paid plans.
 
 Once registered to Meterian with an eligible plan, you can generate an API token and set it as GitHub secret within the repository you wish to scan:
 
@@ -29,6 +29,27 @@ Once registered to Meterian with an eligible plan, you can generate an API token
 
 **Optional** The Open Source Software flag. When set to `true` a project is scanned as Open Source Software and will not require authentication.
 
+#### `autofix_security`
+
+**Optional** The strategy to use to update vulnerable dependencies. When provided, vulnerable dependencies versions in the project manifest file(s) will be automatically updated according to the given strategy. Find more on the available strategies in [the dedicated workflow section](#Autofix-workflow).
+
+#### `autofix_stability`
+
+**Optional** The strategy to use to update outdated dependencies. When provided, outdated dependencies versions in the project manifest file(s) will be automatically updated according to the given strategy. Find more on the available strategies in [the dedicated workflow section](#Autofix-workflow).
+
+#### `autofix_with_pr`
+
+**Optional** The flag to instruct the action on whether a pull request should be opened as a result of the autofix. When set to `true` a pull request containing the changes applied by the autofix will be opened. 
+
+#### `autofix_with_issue`
+
+**Optional** The flag to instruct the action on whether an issue should be opened as a result of the autofix. When set to `true` an issue will be opened to display unsolved problems within your repository.
+
+#### `autofix_with_report`
+
+**Optional** The flag to instruct the action on whether a pull request also including a PDF report should be opened as a result of the autofix.
+
+
 ### General example workflow
 
 If you don't have an existing [**workflow**](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions) within your repository, you can hit the ground running by using the following snippet
@@ -48,7 +69,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.7
+            uses: MeterianHQ/meterian-github-action@v1.0.8
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -59,7 +80,9 @@ Save this in a `main.yml` file in the `.github/workflows` folder, in the root of
     └── main.yml
 ```
 
-If the project you are planning to scan is open source, you can simply use this example which won't require you to specify an authentication token
+### Open source repositories workflow
+
+If the project you are planning to scan is open source, you can simply use this example which won't require you to setup and specify an authentication token
 
 ```yaml
 #main.yml
@@ -76,10 +99,52 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.7
+            uses: MeterianHQ/meterian-github-action@v1.0.8
             with:
               oss: true
 ```
+
+### Autofix workflow
+
+Through the autofix feature it is possible to have vulnerable or outdates dependencies definitions within the project's manifest file(s) automatically fixed. Fixes apply by updating the given dependency version number according to the chosen strategy. Here is a list of available strategies:
+
+- safe: update the dependency version number only with patch versions updates
+- conservative: update the dependency version number with either minor or patch versions updates
+- aggressive: update the dependency version number with either major, minor or path versions updates
+
+A workflow that uses the autofix requires the `GITHUB_TOKEN` environment variable set to ${{ github.token }} and should have at least one of the `autofix_with_*` flags set otherwise no result will be displayed in the form of issue or pull request (should there be problems that need to be reported in your repository):
+```yaml
+#main.yml
+
+name: Meterian Scanner workflow
+
+on: push
+
+jobs:
+    meterian_scan:
+        name: Meterian client scan
+        runs-on: ubuntu-latest
+        steps: 
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Meterian Scanner
+            uses: MeterianHQ/meterian-github-action@v1.0.8
+            env:
+              METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+              GITHUB_TOKEN: ${{ github.token }}
+            with:
+              autofix_security: conservative
+              autofix_stability: safe
+              autofix_with_pr: true
+```
+The workflow above will cause the Meterian Github action to scan your repository and perform the autofix fixing any vulnerable dependency with either the latest safe patch or minor version update where applicable, and fixing any outdated dependency with the latest safe path version update.
+
+**Note**: as of now the autofix will only work on the following manifest files:
+- pom.xml (Java, maven)
+- composer.json (PHP, composer)
+- Gemfile, Gemfile.lock (Ruby, bundle)
+- Pipfile, Pipfile.lock (Python, pipenv)
+- package.json, package-lock.json (NodeJs, npm)
 
 ### Integrating the action with an existing workflow
 
@@ -88,7 +153,7 @@ Within your workflow, create a job step that uses the Meterian GitHub action
 ```yaml   
 # jobs.<job_id>.steps 
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.7
+      uses: MeterianHQ/meterian-github-action@v1.0.8
       env:
         METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -130,7 +195,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.7
+            uses: MeterianHQ/meterian-github-action@v1.0.8
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -154,7 +219,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v2
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.7
+            uses: MeterianHQ/meterian-github-action@v1.0.8
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123

@@ -12,19 +12,19 @@ inputs:
         default: false
     autofix_security:
         required: false
-        description: What reach to use to update vulnerable dependencies
+        description: What strategy to use to update vulnerable dependencies
     autofix_stability:
         required: false
-        description: What reach to use to update outdated dependencies
+        description: What strategy to use to update outdated dependencies
     autofix_with_pr:
         required: false
-        description: Flag to instruct whether a pull request should be opened as a result of the autofix
+        description: Flag to instruct the action on whether a pull request should be opened as a result of the autofix
     autofix_with_issue:
         required: false
-        description: Flag to instruct whether an issue should be opened as a result of the autofix
+        description: Flag to instruct the action on whether an issue should be opened as a result of the autofix
     autofix_with_report:
         required: false
-        description: Flag to instruct whether a pull request also including a PDF report should be opened as a result of the autofix
+        description: Flag to instruct the action on whether a pull request also including a PDF report should be opened as a result of the autofix
 
 runs:
     using: docker
