@@ -81,6 +81,16 @@ cat /tmp/version.txt
 
 # launching the client
 java -Duser.home=/tmp $(echo "${CLIENT_VM_PARAMS:-} ${OSS_TRUE:-}")  -jar ${METERIAN_JAR} ${METERIAN_CLI_ARGS} --interactive=false
+cliExitCode=$?
 
+
+prArgs="$(echo "$(git ls-files -m)" | xargs)"
+if [[ -n "${INPUT_AUTOFIX_WITH_ISSUE:-}" || -n "${INPUT_AUTOFIX_WITH_PR:-}" || -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]];then
+	export METERIAN_AUTOFIX_JSON_REPORT_PATH="$(pwd)/report.json"
+	export METERIAN_AUTOFIX_PDF_REPORT_PATH="$(pwd)/report.pdf"
+	python3 /tmp/meterian-bot.py $prArgs
+fi
+
+exit $cliExitCode
 # please do not add any command here as we need to preserve the exit status
 # of the meterian client

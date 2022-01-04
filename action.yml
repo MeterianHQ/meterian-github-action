@@ -5,17 +5,38 @@ description: Scan your repository for vulnerabilities
 inputs:
     cli_args:
         required: false
-        description: Meterian client parameters
+        description: Meterian client parameters.
     oss:
         required: false
-        description: Open Source Software flag
+        description: Open Source Software flag to instruct the client to avoid authenticating the scan as the project being scanned is open source.
         default: false
+    autofix_security:
+        required: false
+        description: What strategy to use to update vulnerable dependencies
+    autofix_stability:
+        required: false
+        description: What strategy to use to update outdated dependencies
+    autofix_with_pr:
+        required: false
+        description: Flag to instruct the action on whether a pull request should be opened as a result of the autofix
+    autofix_with_issue:
+        required: false
+        description: Flag to instruct the action on whether an issue should be opened as a result of the autofix
+    autofix_with_report:
+        required: false
+        description: Flag to instruct the action on whether a pull request also including a PDF report should be opened as a result of the autofix
+
 runs:
     using: docker
     image: Dockerfile
     args: 
         - ${{ inputs.cli_args }}
         - ${{ inputs.oss }}
+        - ${{ inputs.autofix_security }}
+        - ${{ inputs.autofix_stability }}
+        - ${{ inputs.autofix_with_pr }}
+        - ${{ inputs.autofix_with_issue }}
+        - ${{ inputs.autofix_with_report }}
 branding: 
     icon: zoom-in
     color: blue
