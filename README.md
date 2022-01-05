@@ -106,7 +106,7 @@ jobs:
 
 ### Autofix workflow
 
-Through the autofix feature it is possible to have vulnerable or outdates dependencies definitions within the project's manifest file(s) automatically fixed. Fixes apply by updating the given dependency version number according to the chosen strategy. Here is a list of available strategies:
+Through the autofix feature it is possible to have vulnerable or outdated dependencies definitions within the project's manifest file(s) automatically fixed. Fixes apply by updating the given dependency version number according to the chosen strategy. Here is a list of available strategies:
 
 - safe: update the dependency version number only with patch versions updates
 - conservative: update the dependency version number with either minor or patch versions updates

@@ -173,6 +173,7 @@ if "INPUT_AUTOFIX_WITH_ISSUE" in os.environ:
 OPEN_PR_WITH_REPORT = False
 if "INPUT_AUTOFIX_WITH_REPORT" in os.environ:
     if os.environ["INPUT_AUTOFIX_WITH_REPORT"].title() == "True":
+        OPEN_PR = True
         OPEN_PR_WITH_REPORT = True
 
 if "GITHUB_TOKEN" in os.environ:
@@ -198,16 +199,6 @@ if "GITHUB_TOKEN" in os.environ:
         "meterian-bot",
         "bot.github@meterian.io"
     )
-
-    # Preparing gitbot's request body
-    GIT_BOT_REQUEST_BODY = {
-        "report": {},
-        "options": {
-            "autofix": OPEN_PR,
-            "issue": OPEN_ISSUE,
-            "report": OPEN_PR_WITH_REPORT
-        }
-    }
 
     # Load Meterian report
     meterian_report = json.load(open(meterian_report_file))
