@@ -110,7 +110,7 @@ Through the autofix feature it is possible to have vulnerable or outdated depend
 
 - safe: update the dependency version number only with patch versions updates
 - conservative: update the dependency version number with either minor or patch versions updates
-- aggressive: update the dependency version number with either major, minor or path versions updates
+- aggressive: update the dependency version number with either major, minor or patch versions updates
 
 A workflow that uses the autofix requires the `GITHUB_TOKEN` environment variable set to ${{ github.token }} and should have at least one of the `autofix_with_*` flags set otherwise no result will be displayed in the form of issue or pull request (should there be problems that need to be reported in your repository):
 ```yaml
