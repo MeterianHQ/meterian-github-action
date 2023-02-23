@@ -59,8 +59,8 @@ if [[ -n "${INPUT_AUTOFIX_WITH_ISSUE:-}" || -n "${INPUT_AUTOFIX_WITH_PR:-}" || -
         report_pdf_flag="--report-pdf=report.pdf"
     fi
 
-    if [[ -n "${INPUT_AUTOFIX_PR_MODE:-}" ]]; then
-        pr_mode="--pullreqs:$INPUT_AUTOFIX_PR_MODE"
+    if [[ -n "${PR_MODE:-}" ]]; then
+        pr_mode="--pullreqs:$PR_MODE"
     else
         pr_mode="--pullreqs"
     fi
@@ -103,6 +103,8 @@ fi
 
 if [[ -n "${ALWAYS_OPEN_PRS:-}" ]];then
     always_open_prs_flag="--always-open-prs"
+else
+    always_open_prs_flag=""
 fi
 
 if [[ -n "${INPUT_AUTOFIX_WITH_PR:-}" ]];then
@@ -114,10 +116,7 @@ if [[ -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]];then
 fi
 
 if [[ -n "${INPUT_AUTOFIX_WITH_ISSUE:-}" ]];then
-    report=$(echo "$(ls report.json.pr* 2> /dev/null || echo "")" | head -n 1)
-    if [[ -n "$report" ]]; then
-	    meterian-pr . ISSUE ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log --json-report $(pwd)/$report
-    fi
+	meterian-pr . ISSUE ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log
 fi
 
 exit $cliExitCode

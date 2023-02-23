@@ -39,11 +39,11 @@ Once registered to Meterian with an eligible plan, you can generate an API token
 
 #### `autofix_with_pr`
 
-**Optional** The flag to instruct the action on whether a pull request should be opened as a result of the autofix. When set to `true` a pull request containing the changes applied by the autofix will be opened. 
+**Optional** The flag to instruct the action on whether a pull request should be opened as a result of the autofix. When set to `true` a pull request for each change applied by the autofix will be opened. 
 
 #### `autofix_with_issue`
 
-**Optional** The flag to instruct the action on whether an issue should be opened as a result of the autofix. When set to `true` an issue will be opened to display unsolved problems within your repository.
+**Optional** The flag to instruct the action on whether an issue should be opened as a result of the autofix. When set to `true` an issue for each unsolved problem within your repository will be opened to display.
 
 #### `autofix_with_report`
 
@@ -139,7 +139,11 @@ jobs:
 ```
 The workflow above will cause the Meterian Github action to scan your repository and perform the autofix fixing any vulnerable dependency with either the latest safe patch or minor version update, and fixing any outdated dependency with the latest safe patch version update where applicable. Following the fixes if changes have been made within the repo as instructed by the `autofix_with_pr` flag, a pull request will be opened detailing on these changes.
 
-Identical pull request will not be reopened by default. To change this behaviour set the environment variable "ALWAYS_OPEN_PRS" to true in your workflow.
+Identical pull requests will not be reopened by default. To change this behaviour set the environment variable `ALWAYS_OPEN_PRS` to true in your workflow.
+
+#### PR modes
+By default one pull request capturing one change is opened though for specific programming languages and their manifest files this behaviour can be changed through PR modes. Set your desired PR mode through the environment variable `PR_MODE` in your workflow.
+So far the only available mode is the `bysln` mode. When using it, if your project is organised through .NET solutions and if a change is applied across project in a given solution the resulting pull request will capture all those occurrences.
 
 **Note**: as of now the autofix will only work on the following manifest files:
 - pom.xml (Java, maven)
