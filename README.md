@@ -67,7 +67,7 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
           - name: Checkout
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
           - name: Meterian Scanner
             uses: MeterianHQ/meterian-github-action@v1.0.10
             env:
@@ -97,7 +97,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - name: Checkout
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
           - name: Meterian Scanner
             uses: MeterianHQ/meterian-github-action@v1.0.10
             with:
@@ -126,7 +126,7 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
           - name: Checkout
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
           - name: Meterian Scanner
             uses: MeterianHQ/meterian-github-action@v1.0.10
             env:
@@ -168,7 +168,7 @@ Optionally specify a client input argument
       with:
         cli_args: --min-security=85
 ```
-**Note:** the above snippet assumes that you are already [checking-out](https://github.com/actions/checkout#checkout-v2) your repository. 
+**Note:** the above snippet assumes that you are already [checking-out](https://github.com/actions/checkout#checkout-v3) your repository. 
 
 ### Configure the action to support Go private modules
 
@@ -199,7 +199,7 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
           - name: Checkout
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
           - name: Scan project with the Meterian client
             uses: MeterianHQ/meterian-github-action@v1.0.10
             env:
@@ -223,7 +223,7 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
           - name: Checkout
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
           - name: Scan project with the Meterian client
             uses: MeterianHQ/meterian-github-action@v1.0.10
             env:
