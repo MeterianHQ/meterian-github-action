@@ -69,7 +69,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.10
+            uses: MeterianHQ/meterian-github-action@v1.0.12
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -99,7 +99,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.10
+            uses: MeterianHQ/meterian-github-action@v1.0.12
             with:
               oss: true
 ```
@@ -128,7 +128,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.10
+            uses: MeterianHQ/meterian-github-action@v1.0.12
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
               GITHUB_TOKEN: ${{ github.token }}
@@ -159,7 +159,7 @@ Within your workflow, create a job step that uses the Meterian GitHub action
 ```yaml   
 # jobs.<job_id>.steps 
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.10
+      uses: MeterianHQ/meterian-github-action@v1.0.12
       env:
         METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -201,7 +201,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.10
+            uses: MeterianHQ/meterian-github-action@v1.0.12
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -225,7 +225,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.10
+            uses: MeterianHQ/meterian-github-action@v1.0.12
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
