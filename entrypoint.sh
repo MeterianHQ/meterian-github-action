@@ -85,6 +85,11 @@ fi
 # changing home dir group and ownership
 chown meterian:meterian /home/meterian
 
+# execute pre-scan script if any set
+if [[ -a ${PRE_SCAN_SCRIPT:-} ]]; then
+    su meterian -c -m $GITHUB_WORKSPACE/$PRE_SCAN_SCRIPT
+fi
+
 set +e
 # launch meterian client with the newly created user
 if [[ "$METERIAN_CLI_ARGS" =~ --debug ]]; then
@@ -94,6 +99,11 @@ else
 fi
 cliExitCode=$?
 set -e
+
+# execute post-scan script if any set
+if [[ -a ${POST_SCAN_SCRIPT:-} ]]; then
+    su meterian -c -m $GITHUB_WORKSPACE/$POST_SCAN_SCRIPT
+fi
 
 if [[ "$METERIAN_CLI_ARGS" =~ --debug ]]; then
     meterian_pr_debug_log="-l DEBUG"

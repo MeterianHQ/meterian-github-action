@@ -69,7 +69,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.12
+            uses: MeterianHQ/meterian-github-action@v1.0.13
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -99,7 +99,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.12
+            uses: MeterianHQ/meterian-github-action@v1.0.13
             with:
               oss: true
 ```
@@ -128,7 +128,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.12
+            uses: MeterianHQ/meterian-github-action@v1.0.13
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
               GITHUB_TOKEN: ${{ github.token }}
@@ -159,7 +159,7 @@ Within your workflow, create a job step that uses the Meterian GitHub action
 ```yaml   
 # jobs.<job_id>.steps 
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.12
+      uses: MeterianHQ/meterian-github-action@v1.0.13
       env:
         METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -201,7 +201,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.12
+            uses: MeterianHQ/meterian-github-action@v1.0.13
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -225,7 +225,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.12
+            uses: MeterianHQ/meterian-github-action@v1.0.13
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -234,6 +234,40 @@ jobs:
                 MGA_BITBUCKET_APP_PASSWORD: ${{ secrets.MGA_BITBUCKET_APP_PASSWORD }}
                 GOPRIVATE: "github.com/MyOrgName,bitbucket.org/MyOrgName"
 ```
+
+### Extra environment variables
+
+| Environment variable | Description |
+|----------------------|:-----------:|
+| PRE_SCAN_SCRIPT | A path to a script file that will be executed prior to the Meterian scan. The path must be relative to your repository and the script must be executable. Note: this script is executed via the `meterian` user within the container. |
+| POST_SCAN_SCRIPT | A path to a script file that will be executed after the Meterian scan. The path must be relative to your repository and the script must be executable. Note: this script is executed via the `meterian` user within the container. | 
+
+### Customizable workflow
+
+Should you need to apply some changes that retain their effect in the meterian scan action step you should consider using the following workflow template
+```yaml
+name: Meterian Scanner workflow
+
+on: push
+
+jobs:
+    meterian_scan:
+        name: Meterian client scan
+        runs-on: ubuntu-latest
+        container:
+          image: meterian/cli:latest-gha
+        steps: 
+          - name: Checkout
+            uses: actions/checkout@v3
+          - name: My custom step
+            run: |
+              echo "Custom modification go here..."
+          - name: Meterian Scanner
+            run: meterian_github_action.sh v1.0.13
+            env:
+              METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+```
+It runs the entire scan job using the Meterian Github action image allowing to apply changes within the same container where the scan is later initiated. Note the script invocation `meterian_github_action.sh v1.0.13`. Pass the specific version of the action you need to it or pass nothing to use the latest version.
 
 ## Examples
 
