@@ -269,6 +269,12 @@ jobs:
 ```
 It runs the entire scan job using the Meterian Github action image allowing to apply changes within the same container where the scan is later initiated. Note the script invocation `meterian_github_action.sh v1.0.13`. Pass the specific version of the action you need to it or pass nothing to use the latest version.
 
+When using this template any [input](#inputs) variable for the action is defined as environment variable in the format `INPUT_<VARIABLE NAME>`
+```yaml
+        env:
+          INPUT_CLI_ARGS: "--scan-unity --scan-nodejs=false"
+```
+
 ## Examples
 
 - [Java sample project](https://github.com/MeterianHQ/java-sample-project/blob/master/.github/workflows/main.yml)
