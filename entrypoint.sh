@@ -118,11 +118,11 @@ else
 fi
 
 if [[ -n "${INPUT_AUTOFIX_WITH_PR:-}" ]];then
-	meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --record-prs
-fi
-
-if [[ -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]];then
-	meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --with-pdf-report $(pwd)/report.pdf --record-prs
+    if [[ -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]];then
+        meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --with-pdf-report $(pwd)/report.pdf --record-prs
+    else
+	    meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --record-prs
+    fi
 fi
 
 if [[ -n "${INPUT_AUTOFIX_WITH_ISSUE:-}" ]];then
