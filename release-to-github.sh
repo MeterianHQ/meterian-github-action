@@ -14,7 +14,7 @@ function createNewRelease() {
     "target_commitish": "master",
     "name": "%s",
     "body": "This is a Meterian Scanner GitHub Action, enabling scanning of projects for vulnerabilities. Please provided the necessary METERIAN_API_TOKEN (as a GitHub secret key via the respective repository setting), a token generated via http://meterian.com in order for the action to work. Please checkout the [README](https://github.com/MeterianHQ/meterian-github-action/blob/master/README.md) for further details.",
-    "draft": false,
+    "draft": true,
     "prerelease": false
   }' ${TAG_NAME} ${TAG_NAME})
   echo "~~~~ Creating release ${RELEASE_VERSION}: $POST_DATA"
