@@ -48,14 +48,14 @@ if [[ "${autofix_final_program:$second_last_char_index}" == "," ]]; then
     autofix_final_program="${autofix_final_program:0:$second_last_char_index}"
 fi
 
-if [[ -n "${INPUT_AUTOFIX_WITH_ISSUE:-}" || -n "${INPUT_AUTOFIX_WITH_PR:-}" || -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]];then
+if [[ "${INPUT_AUTOFIX_WITH_ISSUE:-}" == "true" || "${INPUT_AUTOFIX_WITH_PR:-}" == "true" || "${INPUT_AUTOFIX_WITH_REPORT:-}" == "true" ]];then
     autofix_flag="--autofix"
     if [[ -n "$autofix_final_program" ]]; then
         autofix_flag+=":$autofix_final_program"
     fi
 
     report_pdf_flag=""
-    if [[ -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]]; then
+    if [[ "${INPUT_AUTOFIX_WITH_REPORT:-}" == "true" && "${INPUT_AUTOFIX_WITH_PR:-}" == "true" ]]; then
         report_pdf_flag="--report-pdf=report.pdf"
     fi
 
@@ -117,15 +117,15 @@ else
     always_open_prs_flag=""
 fi
 
-if [[ -n "${INPUT_AUTOFIX_WITH_PR:-}" ]];then
-    if [[ -n "${INPUT_AUTOFIX_WITH_REPORT:-}" ]];then
+if [[ "${INPUT_AUTOFIX_WITH_PR:-}" == "true" ]];then
+    if [[ "${INPUT_AUTOFIX_WITH_REPORT:-}" == "true" ]];then
         meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --with-pdf-report $(pwd)/report.pdf --record-prs
     else
 	    meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --record-prs
     fi
 fi
 
-if [[ -n "${INPUT_AUTOFIX_WITH_ISSUE:-}" ]];then
+if [[ "${INPUT_AUTOFIX_WITH_ISSUE:-}" == "true" ]];then
 	meterian-pr . ISSUE ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log
 fi
 
