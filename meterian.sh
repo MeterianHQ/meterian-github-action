@@ -82,7 +82,7 @@ METERIAN_JAR=/tmp/meterian-cli.jar
 updateClient "${METERIAN_JAR}" "https://www.meterian.com/downloads/meterian-cli.jar"
 
 # provide SCM info overrides through GH action env vars
-METERIAN_CLI_ARGS="--project-url=${GITHUB_SERVER_URL:-}/${GITHUB_REPOSITORY:-} --project-branch=${GITHUB_REF_NAME:-} --project-commit=${GITHUB_SHA:-} $METERIAN_CLI_ARGS"
+METERIAN_CLI_ARGS="--project-url=${GITHUB_SERVER_URL:-}/${GITHUB_REPOSITORY:-} --project-branch=${BRANCH_FOR_SCAN:-} --project-commit=${GITHUB_SHA:-} $METERIAN_CLI_ARGS"
 
 # Printing meterian dockerized client version
 cat /tmp/version.txt 

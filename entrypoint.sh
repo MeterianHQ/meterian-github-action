@@ -90,6 +90,12 @@ if [[ -a ${PRE_SCAN_SCRIPT:-} ]]; then
     su meterian -c -m $GITHUB_WORKSPACE/$PRE_SCAN_SCRIPT
 fi
 
+# establish right branch for scan
+export BRANCH_FOR_SCAN="${GITHUB_REF_NAME}"
+if [[ "${GITHUB_EVENT_NAME:-}" =~ ^pull_request ]]; then
+    export BRANCH_FOR_SCAN="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+fi
+
 set +e
 # launch meterian client with the newly created user
 if [[ "$METERIAN_CLI_ARGS" =~ --debug ]]; then
@@ -119,14 +125,14 @@ fi
 
 if [[ "${INPUT_AUTOFIX_WITH_PR:-}" == "true" ]];then
     if [[ "${INPUT_AUTOFIX_WITH_REPORT:-}" == "true" ]];then
-        meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --with-pdf-report $(pwd)/report.pdf --record-prs
+        meterian-pr . PR ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log $always_open_prs_flag --with-pdf-report $(pwd)/report.pdf --record-prs
     else
-	    meterian-pr . PR ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log $always_open_prs_flag --record-prs
+	    meterian-pr . PR ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log $always_open_prs_flag --record-prs
     fi
 fi
 
 if [[ "${INPUT_AUTOFIX_WITH_ISSUE:-}" == "true" ]];then
-	meterian-pr . ISSUE ${GITHUB_REPOSITORY} ${GITHUB_REF_NAME} $meterian_pr_debug_log
+	meterian-pr . ISSUE ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log
 fi
 
 exit $cliExitCode
