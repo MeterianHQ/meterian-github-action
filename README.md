@@ -113,7 +113,7 @@ Through the autofix feature it is possible to have vulnerable or outdated depend
 - aggressive: update the dependency version number with either major, minor or patch versions updates
 
 A workflow that uses the autofix requires the `GITHUB_TOKEN` environment variable set to authorize a variety of actions such as pushing commits and branches on your repository. We recommend using the workflow context token set to the variable `${{ github.token }}` as this ensures that the outcome of this workflow does not [**trigger cascading workflows**](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow). You can use any other token otherwise but you will need to handle the possible cascading workflows effect yourself. One way to go about that is using [branch exclusions](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-excluding-branches):
-```
+```yaml
 on:
   push:
     branches-ignore:    
