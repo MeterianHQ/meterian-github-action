@@ -112,7 +112,17 @@ Through the autofix feature it is possible to have vulnerable or outdated depend
 - conservative: update the dependency version number with either minor or patch versions updates
 - aggressive: update the dependency version number with either major, minor or patch versions updates
 
-A workflow that uses the autofix requires the `GITHUB_TOKEN` environment variable set to ${{ github.token }} and should have at least one of the `autofix_with_*` flags set otherwise no result will be displayed in the form of issue or pull request (should there be problems that need to be reported in your repository):
+A workflow that uses the autofix requires the `GITHUB_TOKEN` environment variable set to authorize a variety of actions such as pushing commits and branches on your repository. We recommend using the workflow context token set to the variable `${{ github.token }}` as this ensures that the outcome of this workflow does not [**trigger cascading workflows**](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow). You can use any other token otherwise but you will need to handle the possible cascading workflows effect yourself. One way to go about that is using [branch exclusions](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-excluding-branches):
+```
+on:
+  push:
+    branches-ignore:    
+      - '**meterian-bot/pr**'
+      # branches opened by the action are either prefixed by 'meterian-bot/pr'
+      # or composed as '<non-default-branch-name>_meterian_bot/pr' 
+```
+
+In addition to setting up a valid authorization token, you should have at least one of the `autofix_with_*` flags set otherwise no result will be displayed in the form of issue or pull request (should there be problems that need to be reported in your repository):
 ```yaml
 #main.yml
 
