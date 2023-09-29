@@ -12,6 +12,10 @@ echo 'export PATH=${ORIGINAL_PATH}' >> ~/.bashrc
 echo 'export RUSTUP_HOME=/opt/rust/rustup' >> ~/.bashrc
 source ~/.bashrc
 
+METERIAN_ENV=${METERIAN_ENV:-"www"}
+METERIAN_PROTO=${METERIAN_PROTO:-"https"}
+METERIAN_DOMAIN=${METERIAN_DOMAIN:-"meterian.io"}
+
 getLastModifiedDateTimeForFileInSeconds() {
 	MAYBE_FILE=$1
 
@@ -79,7 +83,7 @@ updateClient() {
 METERIAN_JAR=/tmp/meterian-cli.jar
 
 # update the client if necessary
-updateClient "${METERIAN_JAR}" "https://www.meterian.com/downloads/meterian-cli.jar"
+updateClient "${METERIAN_JAR}" "${METERIAN_PROTO}://${METERIAN_ENV}.${METERIAN_DOMAIN}/downloads/meterian-cli.jar"
 
 # provide SCM info overrides through GH action env vars
 METERIAN_CLI_ARGS="--project-url=${GITHUB_SERVER_URL:-}/${GITHUB_REPOSITORY:-} --project-branch=${BRANCH_FOR_SCAN:-} --project-commit=${GITHUB_SHA:-} $METERIAN_CLI_ARGS"
