@@ -250,7 +250,10 @@ jobs:
 | Environment variable | Description |
 |----------------------|:-----------:|
 | PRE_SCAN_SCRIPT | A path to a script file that will be executed prior to the Meterian scan. The path must be relative to your repository and the script must be executable. Note: this script is executed via the `meterian` user within the container. |
-| POST_SCAN_SCRIPT | A path to a script file that will be executed after the Meterian scan. The path must be relative to your repository and the script must be executable. Note: this script is executed via the `meterian` user within the container. | 
+| POST_SCAN_SCRIPT | A path to a script file that will be executed after the Meterian scan. The path must be relative to your repository and the script must be executable. Note: this script is executed via the `meterian` user within the container. |
+| METERIAN_ENV | The subdomain of your site where your instance of Meterian runs (given the instance of Meterian running on https://www.meterian.io this would be set to www) |
+| METERIAN_DOMAIN | The domain of your site (given the instance of Meterian running on https://www.meterian.io this would be set to meterian.io) |
+| METERIAN_PROTO | The HTTP protocol of your site (when unset the default is https) (given the instance of Meterian running on https://www.meterian.io this would be set to https) |
 
 ### Customizable workflow
 
