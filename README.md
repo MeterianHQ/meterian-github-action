@@ -161,6 +161,8 @@ So far the only available mode is the `bysln` mode. When using it, if your proje
 - Gemfile, Gemfile.lock (Ruby, bundle)
 - Pipfile, Pipfile.lock (Python, pipenv)
 - package.json, package-lock.json (NodeJs, npm)
+- package.json, yarn.lock (NodeJs, yarn)
+- *.msproj (.Net)
 
 ### Integrating the action with an existing workflow
 
