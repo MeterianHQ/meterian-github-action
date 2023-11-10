@@ -96,6 +96,10 @@ if [[ "${GITHUB_EVENT_NAME:-}" =~ ^pull_request ]]; then
     export BRANCH_FOR_SCAN="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
 fi
 
+# make a usable copy of the packaged client coming from the parent image
+cp /tmp/meterian-cli-www.jar /tmp/packaged-meterian-cli.jar
+chown meterian:meterian /tmp/packaged-meterian-cli.jar
+
 set +e
 # launch meterian client with the newly created user
 if [[ "$METERIAN_CLI_ARGS" =~ --debug ]]; then

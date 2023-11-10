@@ -60,6 +60,16 @@ goVersionControlCustomConfig() {
 }
 goVersionControlCustomConfig
 
+isClientFunctioning() {
+	METERIAN_JAR="$1"
+	java -jar ${METERIAN_JAR} --version >> /dev/null 2>&1
+	if [[ "$?" != "0" ]];then
+		echo "true"
+	else
+		echo "false"
+	fi
+}
+
 updateClient() {
 	METERIAN_JAR_PATH=$1
 	CLIENT_TARGET_URL=$2
@@ -76,7 +86,11 @@ updateClient() {
 	# 	curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
 	# fi
 	echo "Checking client..."
-	curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
+	if [[ "$METERIAN_CLI_ARGS" =~ --debug ]]; then
+		curl -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"
+	else
+		curl -s -o ${METERIAN_JAR_PATH} "${CLIENT_TARGET_URL}"  >/dev/null
+	fi
 }
 
 # meterian jar location
@@ -84,6 +98,12 @@ METERIAN_JAR=/tmp/meterian-cli.jar
 
 # update the client if necessary
 updateClient "${METERIAN_JAR}" "${METERIAN_PROTO}://${METERIAN_ENV}.${METERIAN_DOMAIN}/downloads/meterian-cli.jar"
+
+# Check that just downloaded client is usable
+if [[ "$(isClientFunctioning "$METERIAN_JAR_PATH")" == "true" ]];then
+	echo "Client update failed, will use packaged client"
+	cp /tmp/packaged-meterian-cli.jar $METERIAN_JAR
+fi
 
 # provide SCM info overrides through GH action env vars
 METERIAN_CLI_ARGS="--project-url=${GITHUB_SERVER_URL:-}/${GITHUB_REPOSITORY:-} --project-branch=${BRANCH_FOR_SCAN:-} --project-commit=${GITHUB_SHA:-} $METERIAN_CLI_ARGS"
