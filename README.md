@@ -69,7 +69,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.16
+            uses: MeterianHQ/meterian-github-action@v1.0.17
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -99,7 +99,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.16
+            uses: MeterianHQ/meterian-github-action@v1.0.17
             with:
               oss: true
 ```
@@ -138,7 +138,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.16
+            uses: MeterianHQ/meterian-github-action@v1.0.17
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
               GITHUB_TOKEN: ${{ github.token }}
@@ -171,7 +171,7 @@ Within your workflow, create a job step that uses the Meterian GitHub action
 ```yaml   
 # jobs.<job_id>.steps 
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.16
+      uses: MeterianHQ/meterian-github-action@v1.0.17
       env:
         METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -213,7 +213,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.16
+            uses: MeterianHQ/meterian-github-action@v1.0.17
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -237,7 +237,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.16
+            uses: MeterianHQ/meterian-github-action@v1.0.17
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -278,11 +278,11 @@ jobs:
             run: |
               echo "Custom modification go here..."
           - name: Meterian Scanner
-            run: meterian_github_action.sh v1.0.16
+            run: meterian_github_action.sh v1.0.17
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
-It runs the entire scan job using the Meterian Github action image allowing to apply changes within the same container where the scan is later initiated. Note the script invocation `meterian_github_action.sh v1.0.16`. Pass the specific version of the action you need to it or pass nothing to use the latest version.
+It runs the entire scan job using the Meterian Github action image allowing to apply changes within the same container where the scan is later initiated. Note the script invocation `meterian_github_action.sh v1.0.17`. Pass the specific version of the action you need to it or pass nothing to use the latest version.
 
 When using this template any [input](#inputs) variable for the action is defined as environment variable in the format `INPUT_<VARIABLE NAME>`
 ```yaml
