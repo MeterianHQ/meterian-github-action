@@ -12,11 +12,6 @@ chmod -R 777 /opt/rust/
 
 export ORIGINAL_PATH=$PATH
 
-length() {
-    arg="${1:-}"
-    echo ${#arg}
-}
-
 OSS="$INPUT_OSS"
 if [[ "$OSS" == "true" ]]; then
     export OSS_TRUE="-Dcli.oss.enabled=true"
@@ -30,23 +25,18 @@ cp /root/meterian.sh /tmp/meterian.sh
 cp /root/version.txt /tmp/version.txt
 export METERIAN_CLI_ARGS="$INPUT_CLI_ARGS"
 
-autofix_security_program=""
+autofix_programs=()
 if [[ -n "${INPUT_AUTOFIX_SECURITY:-}" ]]; then
-    autofix_security_program+="${INPUT_AUTOFIX_SECURITY}+vulns+no-overrides"
+    autofix_programs+=("${INPUT_AUTOFIX_SECURITY}+vulns+no-overrides")
 fi
 
-autofix_stability_program=""
 if [[ -n "${INPUT_AUTOFIX_STABILITY:-}" ]]; then
-    autofix_stability_program+="${INPUT_AUTOFIX_STABILITY}+dated+no-overrides"
+    autofix_programs+=("${INPUT_AUTOFIX_STABILITY}+dated+no-overrides")
 fi
 
-autofix_final_program=""
-autofix_final_program+="$autofix_security_program,$autofix_stability_program"
-
-second_last_char_index=$(($(length $autofix_final_program) - 1))
-if [[ "${autofix_final_program:$second_last_char_index}" == "," ]]; then
-    autofix_final_program="${autofix_final_program:0:$second_last_char_index}"
-fi
+# join the requested programs with a comma; an empty element here would be
+# expanded by the client into a full program with permissive defaults
+autofix_final_program=$(IFS=,; echo "${autofix_programs[*]:-}")
 
 if [[ "${INPUT_AUTOFIX_WITH_ISSUE:-}" == "true" || "${INPUT_AUTOFIX_WITH_PR:-}" == "true" || "${INPUT_AUTOFIX_WITH_REPORT:-}" == "true" ]];then
     autofix_flag="--autofix"
