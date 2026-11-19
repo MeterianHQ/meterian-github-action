@@ -118,8 +118,10 @@ else
 fi
 
 # on GitHub Enterprise Server the API is not at api.github.com
-if [[ -n "${GITHUB_API_URL:-}" && "${GITHUB_API_URL}" != "https://api.github.com" ]];then
-    api_base_url_flag="--api-base-url ${GITHUB_API_URL}"
+api_base_url="${GITHUB_API_URL:-}"
+api_base_url="${api_base_url%/}"
+if [[ -n "${api_base_url}" && "${api_base_url}" != "https://api.github.com" ]];then
+    api_base_url_flag="--api-base-url ${api_base_url}"
 else
     api_base_url_flag=""
 fi
