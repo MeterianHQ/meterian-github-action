@@ -117,16 +117,23 @@ else
     always_open_prs_flag=""
 fi
 
+# on GitHub Enterprise Server the API is not at api.github.com
+if [[ -n "${GITHUB_API_URL:-}" && "${GITHUB_API_URL}" != "https://api.github.com" ]];then
+    api_base_url_flag="--api-base-url ${GITHUB_API_URL}"
+else
+    api_base_url_flag=""
+fi
+
 if [[ "${INPUT_AUTOFIX_WITH_PR:-}" == "true" ]];then
     if [[ "${INPUT_AUTOFIX_WITH_REPORT:-}" == "true" ]];then
-        meterian-pr . PR ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log $always_open_prs_flag --with-pdf-report $(pwd)/report.pdf --record-prs
+        meterian-pr . PR ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log $always_open_prs_flag $api_base_url_flag --with-pdf-report $(pwd)/report.pdf --record-prs
     else
-	    meterian-pr . PR ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log $always_open_prs_flag --record-prs
+	    meterian-pr . PR ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log $always_open_prs_flag $api_base_url_flag --record-prs
     fi
 fi
 
 if [[ "${INPUT_AUTOFIX_WITH_ISSUE:-}" == "true" ]];then
-	meterian-pr . ISSUE ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log
+	meterian-pr . ISSUE ${GITHUB_REPOSITORY} ${BRANCH_FOR_SCAN} $meterian_pr_debug_log $api_base_url_flag
 fi
 
 exit $cliExitCode

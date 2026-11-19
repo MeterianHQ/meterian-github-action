@@ -30,6 +30,12 @@ getLastModifiedDateTimeForFileInSeconds() {
 
 githubPrivateCustomConfig() {
 	echo "machine github.com login "${MGA_GITHUB_USER}" password "${MGA_GITHUB_TOKEN}"" >> "${HOME}/.netrc"
+
+	# on GitHub Enterprise Server also add the server host
+	GITHUB_HOST="$(echo "${GITHUB_SERVER_URL:-https://github.com}" | sed -E 's#^https?://##; s#[:/].*$##')"
+	if [[ -n "${GITHUB_HOST}" && "${GITHUB_HOST}" != "github.com" ]]; then
+		echo "machine ${GITHUB_HOST} login "${MGA_GITHUB_USER}" password "${MGA_GITHUB_TOKEN}"" >> "${HOME}/.netrc"
+	fi
 }
 
 bitbucketPrivateCustomConfig() {

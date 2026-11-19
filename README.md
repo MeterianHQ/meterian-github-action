@@ -247,6 +247,32 @@ jobs:
                 GOPRIVATE: "github.com/MyOrgName,bitbucket.org/MyOrgName"
 ```
 
+### GitHub Enterprise Server
+
+The action works on GitHub Enterprise Server (GHES). It needs no extra configuration. The action reads the server addresses from the environment variables that the runner sets:
+
+- `GITHUB_API_URL` (for example `https://ghes.example.com/api/v3`): the action sends the autofix pull requests and issues to this address.
+- `GITHUB_SERVER_URL` (for example `https://ghes.example.com`): the action writes the credentials in `MGA_GITHUB_USER` and `MGA_GITHUB_TOKEN` for this host and for `github.com`. Thus private dependencies on the server and on `github.com` both resolve.
+
+On github.com and on GitHub Enterprise Cloud, the behaviour does not change.
+
+Make sure that your installation meets these requirements:
+
+- The action is a Docker container action. It needs Linux runners with Docker.
+- The server must get the action from github.com. Enable [GitHub Connect](https://docs.github.com/en/enterprise-server/admin/managing-github-actions-for-your-enterprise/managing-access-to-actions-from-githubcom/enabling-automatic-access-to-githubcom-actions-using-github-connect), or copy the action to the server with [`actions-sync`](https://docs.github.com/en/enterprise-server/admin/managing-github-actions-for-your-enterprise/managing-access-to-actions-from-githubcom/manually-syncing-actions-from-githubcom).
+- The runners need HTTPS egress to Meterian (`www.meterian.io`, or your own instance, see [Extra environment variables](#extra-environment-variables)) and to Docker Hub, to get the `meterian/cli` image.
+- To upload SARIF results to code scanning, use `github/codeql-action/upload-sarif`. Code scanning needs GitHub Advanced Security on the server.
+
+When you use private Go modules on the server, add the server host to `GOPRIVATE`:
+
+```yaml
+            env:
+                METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+                MGA_GITHUB_USER: joe-bloggs123
+                MGA_GITHUB_TOKEN: ${{ secrets.MGA_GITHUB_TOKEN }}
+                GOPRIVATE: "ghes.example.com/MyOrgName"
+```
+
 ### Extra environment variables
 
 | Environment variable | Description |
