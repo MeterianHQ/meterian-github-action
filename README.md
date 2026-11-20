@@ -69,7 +69,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.18
+            uses: MeterianHQ/meterian-github-action@v1.0.19
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -99,7 +99,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.18
+            uses: MeterianHQ/meterian-github-action@v1.0.19
             with:
               oss: true
 ```
@@ -138,7 +138,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Meterian Scanner
-            uses: MeterianHQ/meterian-github-action@v1.0.18
+            uses: MeterianHQ/meterian-github-action@v1.0.19
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
               GITHUB_TOKEN: ${{ github.token }}
@@ -171,7 +171,7 @@ Within your workflow, create a job step that uses the Meterian GitHub action
 ```yaml   
 # jobs.<job_id>.steps 
     - name: Meterian Scanner
-      uses: MeterianHQ/meterian-github-action@v1.0.18
+      uses: MeterianHQ/meterian-github-action@v1.0.19
       env:
         METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
@@ -213,7 +213,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.18
+            uses: MeterianHQ/meterian-github-action@v1.0.19
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -237,7 +237,7 @@ jobs:
           - name: Checkout
             uses: actions/checkout@v3
           - name: Scan project with the Meterian client
-            uses: MeterianHQ/meterian-github-action@v1.0.18
+            uses: MeterianHQ/meterian-github-action@v1.0.19
             env:
                 METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
                 MGA_GITHUB_USER: joe-bloggs123
@@ -245,6 +245,33 @@ jobs:
                 MGA_BITBUCKET_USER: john-doe456
                 MGA_BITBUCKET_APP_PASSWORD: ${{ secrets.MGA_BITBUCKET_APP_PASSWORD }}
                 GOPRIVATE: "github.com/MyOrgName,bitbucket.org/MyOrgName"
+```
+
+### GitHub Enterprise Server
+
+The action works on GitHub Enterprise Server (GHES). It needs no extra configuration. The action reads the server addresses from the environment variables that the runner sets:
+
+- `GITHUB_API_URL` (for example `https://ghes.example.com/api/v3`): the action sends the autofix pull requests and issues to this address.
+- `GITHUB_SERVER_URL` (for example `https://ghes.example.com`): the action writes the credentials in `MGA_GITHUB_USER` and `MGA_GITHUB_TOKEN` for this host and for `github.com`. Thus private dependencies on the server and on `github.com` both resolve.
+
+On github.com, the behaviour does not change. GitHub Enterprise Cloud with data residency (`<subdomain>.ghe.com`) uses the same variables, so autofix pull requests and issues also work there.
+
+Make sure that your installation meets these requirements:
+
+- The action is a Docker container action. It needs Linux runners with Docker.
+- The server must get the action from github.com. Enable [GitHub Connect](https://docs.github.com/en/enterprise-server/admin/managing-github-actions-for-your-enterprise/managing-access-to-actions-from-githubcom/enabling-automatic-access-to-githubcom-actions-using-github-connect), or copy the action to the server with [`actions-sync`](https://docs.github.com/en/enterprise-server/admin/managing-github-actions-for-your-enterprise/managing-access-to-actions-from-githubcom/manually-syncing-actions-from-githubcom).
+- The runners need HTTPS egress to Meterian (`www.meterian.io`, or your own instance, see [Extra environment variables](#extra-environment-variables)) and to Docker Hub, to get the `meterian/cli` image.
+- With the [customizable workflow](#customizable-workflow), the runners also need HTTPS egress to `raw.githubusercontent.com`. The `meterian_github_action.sh` script downloads the action scripts from there.
+- To upload SARIF results to code scanning, use `github/codeql-action/upload-sarif`. Code scanning needs GitHub Advanced Security on the server.
+
+When you use private Go modules on the server, add the server host to `GOPRIVATE`:
+
+```yaml
+            env:
+                METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
+                MGA_GITHUB_USER: joe-bloggs123
+                MGA_GITHUB_TOKEN: ${{ secrets.MGA_GITHUB_TOKEN }}
+                GOPRIVATE: "ghes.example.com/MyOrgName"
 ```
 
 ### Extra environment variables
@@ -278,11 +305,11 @@ jobs:
             run: |
               echo "Custom modification go here..."
           - name: Meterian Scanner
-            run: meterian_github_action.sh v1.0.18
+            run: meterian_github_action.sh v1.0.19
             env:
               METERIAN_API_TOKEN: ${{ secrets.METERIAN_API_TOKEN }}
 ```
-It runs the entire scan job using the Meterian Github action image allowing to apply changes within the same container where the scan is later initiated. Note the script invocation `meterian_github_action.sh v1.0.18`. Pass the specific version of the action you need to it or pass nothing to use the latest version.
+It runs the entire scan job using the Meterian Github action image allowing to apply changes within the same container where the scan is later initiated. Note the script invocation `meterian_github_action.sh v1.0.19`. Pass the specific version of the action you need to it or pass nothing to use the latest version.
 
 When using this template any [input](#inputs) variable for the action is defined as environment variable in the format `INPUT_<VARIABLE NAME>`
 ```yaml
